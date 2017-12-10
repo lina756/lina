@@ -45,5 +45,4 @@ function ajax(url,method,async,data,success,error){
         },
         error :error
     });
-
 }
