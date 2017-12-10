@@ -1,0 +1,251 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Web App Theme</title>
+  <link rel="stylesheet" href="assets/stylesheets/web-app-theme/base.css" type="text/css" media="screen" />
+  <link rel="stylesheet" id="current-theme" href="assets/stylesheets/web-app-theme/themes/default/style.css" type="text/css" media="screen" />
+  <script type="text/javascript" charset="utf-8" src="javascripts/jquery-1.8.3.js"></script>
+  <script type="text/javascript" charset="utf-8" src="javascripts/jquery.scrollTo.js"></script>
+  <script type="text/javascript" charset="utf-8" src="javascripts/jquery.localscroll.js"></script>
+  <script type="text/javascript" charset="utf-8">
+    // <![CDATA[
+    var Theme = {
+      activate: function(name) {
+        window.location.hash = 'themes/' + name
+        Theme.loadCurrent();
+      },
+
+      loadCurrent: function() {
+        var hash = window.location.hash;
+        if (hash.length > 0) {
+          matches = hash.match(/^#themes\/([a-z0-9\-_]+)$/);
+          if (matches && matches.length > 1) {
+            $('#current-theme').attr('href', 'assets/web-app-theme/themes/' + matches[1] + '/style.css');
+          } else {
+            alert('theme not valid');
+          }
+        }
+      }
+    }
+
+    $(document).ready(function() {
+      Theme.loadCurrent();
+      $.localScroll();
+      $('.table :checkbox.toggle').each(function(i, toggle) {
+        $(toggle).change(function(e) {
+          $(toggle).parents('table:first').find(':checkbox:not(.toggle)').each(function(j, checkbox) {
+            checkbox.checked = !checkbox.checked;
+          })
+        });
+      });
+    });
+    // ]]>
+  </script>
+</head>
+<body>
+  <div id="container">
+    <div id="header">
+      <h1><a href="index.html">Web App Theme</a></h1>
+      <div id="main-navigation">
+        <ul class="wat-cf">
+        </ul>
+      </div>
+    </div>
+    <div id="wrapper" class="wat-cf">
+      <div id="main">
+
+        <div class="block" id="block-tables">
+          <div class="content">
+            <h2 class="title">订单</h2>
+
+            <div class="inner">
+              <form action="#" class="form">
+                <div class="group wat-cf">
+                  <div class="left">
+                    <label class="label">单号</label>
+                  </div>
+                  <div class="right">
+                    <input type="text" id="orderCode" class="text_field" style="width: 50%; min-width: 150px;"/>
+                    <div>
+                      <span class="description">Ex: 单号</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="group wat-cf">
+                  <div class="left">
+                    <label class="label">制单人</label>
+                  </div>
+                  <div class="right">
+                    <input type="text" id="createOrderName" class="text_field" style="width: 50%; min-width: 150px;"/>
+                    <div>
+                      <span class="description">Ex: 制单人</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="group navform wat-cf">
+                  <button id="submitEdit" class="button" type="button">
+                    <img src="images/icons/tick.png" alt="Save" /> 完成
+                  </button>
+                  <button id="cancelEdit" class="button" type="button">
+                    <img src="images/icons/cross.png" alt="Save" /> 取消
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <h2 class="title">关联款式</h2>
+            <div class="inner">
+              <div class="actions-bar wat-cf">
+                <div class="actions">
+                  <button class="button" type="button">
+                    <img src="images/icons/cross.png" alt="Delete" /> Delete
+                  </button>
+                  <button id="addOrderStyle" class="button" type="button">
+                    <img src="images/icons/application_edit.png" alt="Save" /> 关联
+                  </button>
+                </div>
+              </div>
+              <form action="#" class="form">
+                <table id="valuationTable" class="table">
+                  <thead>
+                    <tr>
+                      <th class="first"><input type="checkbox" class="checkbox toggle" /></th>
+                      <th>工作日期</th>
+                      <th>款号</th>
+                      <th>款式</th>
+                      <th>摘要</th>
+                      <th>人数</th>
+                      <th>数量</th>
+                      <th>计价类型</th>
+                      <th>工价</th>
+                      <th>加价</th>
+                      <th>总价</th>
+                      <th>是否验收</th>
+                      <th>验收人</th>
+                      <th>备注</th>
+                      <th class="last">&nbsp;</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+
+                  </tbody>
+                </table>
+              </form>
+
+            </div>
+          </div>
+        </div>
+
+        <div id="footer">
+          <div class="block">
+            <p>Copyright &copy; 2010 Your Site.</p>
+          </div>
+        </div>
+      </div>
+      <div id="box">
+        <div class="block" id="block-signup">
+          <h2>关联款式</h2>
+          <div class="content">
+            <div class="form">
+              <div class="group wat-cf">
+                <div class="left">
+                  <label class="label">工作日期</label>
+                </div>
+                <div class="right">
+                  <input id="workDate" type="text" class="text_field" />
+                  <span class="description">Ex: 工作日期</span>
+                </div>
+              </div>
+
+              <div class="group wat-cf">
+                <div class="left">
+                  <label class="label">款号</label>
+                </div>
+                <div class="right">
+                  <select id="styleCode" class="text_field" style="width: 150px;">
+                  </select>
+                  <span style="display:block;" class="description">Ex: 款号</span>
+                </div>
+              </div>
+
+              <div class="group wat-cf">
+                <div class="left">
+                  <label class="label">款式</label>
+                </div>
+                <div class="right">
+                  <input id="styleName" type="text" readonly style="background: #cccccc;color: #fff;" class="text_field" />
+                  <span class="description">Ex: 款式</span>
+                </div>
+              </div>
+
+              <div class="group wat-cf">
+                <div class="left">
+                  <label class="label">摘要</label>
+                </div>
+                <div class="right">
+                  <input id="ascription" type="text" class="text_field" />
+                  <span class="description">Ex: 摘要</span>
+                </div>
+              </div>
+
+              <div class="group wat-cf">
+                <div class="left">
+                  <label class="label">人数</label>
+                </div>
+                <div class="right">
+                  <input id="persons" type="text" class="text_field" />
+                  <span class="description">Ex: 人数</span>
+                </div>
+              </div>
+
+              <div class="group wat-cf">
+                <div class="left">
+                  <label class="label">数量</label>
+                </div>
+                <div class="right">
+                  <input id="count" type="text" class="text_field" />
+                  <span class="description">Ex: 数量</span>
+                </div>
+              </div>
+
+              <div class="group wat-cf">
+                <div class="left">
+                  <label class="label">计价方式</label>
+                </div>
+                <div class="right">
+                  <select id="valuationType" class="text_field" style="width: 150px;">
+                  </select>
+                  <span style="display:block;" class="description">Ex: 计价方式</span>
+                </div>
+              </div>
+
+              <div class="group wat-cf">
+                <div class="left">
+                  <label class="label">备注</label>
+                </div>
+                <div class="right">
+                  <input id="remark" type="text" class="text_field" />
+                  <span class="description">Ex: 备注</span>
+                </div>
+              </div>
+
+              <input id="edit" type="hidden"/>
+
+              <div class="group navform wat-cf">
+                <button id="createOrderStyle" class="button" type="button">
+                  <img src="images/icons/tick.png" alt="Save" /> 关联
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<script type="text/javascript" charset="utf-8" src="javascripts/util/util.js"></script>
+<script type="text/javascript" charset="utf-8" src="javascripts/order/orderDetail.js"></script>
+</html>
+

@@ -1,0 +1,191 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Web App Theme</title>
+  <link rel="stylesheet" href="assets/stylesheets/web-app-theme/base.css" type="text/css" media="screen" />
+  <link rel="stylesheet" id="current-theme" href="assets/stylesheets/web-app-theme/themes/default/style.css" type="text/css" media="screen" />
+  <script type="text/javascript" charset="utf-8" src="javascripts/jquery-1.8.3.js"></script>
+  <script type="text/javascript" charset="utf-8" src="javascripts/jquery.scrollTo.js"></script>
+  <script type="text/javascript" charset="utf-8" src="javascripts/jquery.localscroll.js"></script>
+  <script type="text/javascript" charset="utf-8">
+    // <![CDATA[
+    var Theme = {
+      activate: function(name) {
+        window.location.hash = 'themes/' + name;
+        Theme.loadCurrent();
+      },
+
+      loadCurrent: function() {
+        var hash = window.location.hash;
+        if (hash.length > 0) {
+          matches = hash.match(/^#themes\/([a-z0-9\-_]+)$/);
+          if (matches && matches.length > 1) {
+            $('#current-theme').attr('href', 'assets/web-app-theme/themes/' + matches[1] + '/style.css');
+          } else {
+            alert('theme not valid');
+          }
+        }
+      }
+    }
+
+    $(document).ready(function() {
+      Theme.loadCurrent();
+      $.localScroll();
+      $('.table :checkbox.toggle').each(function(i, toggle) {
+        $(toggle).change(function(e) {
+          $(toggle).parents('table:first').find(':checkbox:not(.toggle)').each(function(j, checkbox) {
+            checkbox.checked = !checkbox.checked;
+          })
+        });
+      });
+    });
+    // ]]>
+  </script>
+</head>
+<body>
+  <div id="container">
+    <div id="header">
+      <h1><a href="index.html">Web App Theme</a></h1>
+      <!-- <div id="user-navigation">
+        <ul class="wat-cf">
+          <li><a href="#">Profile</a></li>
+          <li><a href="#">Settings</a></li>
+          <li><a class="logout" href="#">Logout</a></li>
+        </ul>
+      </div> -->
+      <div id="main-navigation">
+        <ul class="wat-cf">
+        </ul>
+      </div>
+    </div>
+    <div id="wrapper" class="wat-cf">
+      <div id="main">
+
+        <div class="block" id="block-tables">
+          <div class="content">
+            <h2 class="title">订单列表</h2>
+
+            <div class="inner">
+
+              <form action="javascripts:void(0)" class="form">
+
+                <div class="group wat-cf">
+                  <div class="left">
+                    <label class="label" style="width: 60px;padding:0px;display: inline-block;vertical-align:bottom;">是否验收</label>
+                    <select id="checkStatus" class="text_field" style="display:inline-block;vertical-align:middle;">
+                      <option value="">--请选择--</option>
+                      <option value="0">待验收</option>
+                      <option value="1">已验收</option>
+                    </select>
+                  </div>
+
+                  <div class="right">
+                    <input type="text" id="filter" class="text_field" style="width: 30%; min-width: 150px;"/>
+                    <input type="button" id="selectOrder" value="查询">
+                  </div>
+                </div>
+
+                <table id="styleTable" class="table">
+                  <thead>
+                    <tr>
+                      <th class="first"><input type="checkbox" class="checkbox toggle" /></th>
+                      <th>ID</th>
+                      <th>单号</th>
+                      <th>制单人</th>
+                      <th>工作日期</th>
+                      <th>款号</th>
+                      <th>款式</th>
+                      <th>摘要</th>
+                      <th>人数</th>
+                      <th>数量</th>
+                      <th>计价类型</th>
+                      <th>工价</th>
+                      <th>加价</th>
+                      <th>总价</th>
+                      <th>是否验收</th>
+                      <th>验收人</th>
+                      <th>备注</th>
+                      <th class="last">&nbsp;</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+                <div  class="actions-bar wat-cf" style="float: right;">
+                  <div class="left">
+                    <label class="label">统计：</label>
+                  </div>
+                  <div class="right">
+                    <select id="statisticsSelect" class="text_field" style="display:inline-block;vertical-align:middle;margin-bottom: 5px;">
+                      <option>--请选择--</option>
+                      <option value="0">单号</option>
+                      <option value="1">款号</option>
+                    </select>
+                    <input id="statistics" type="button" value="统计">
+                    <input id="statisticsFilter" placeholder="请输入单号 / 款号" type="text" class="text_field" />
+                    <p id="statisticsResult" class="text_field" style="width: 280px;">
+
+                    </p>
+                    <span class="description">Ex: 统计，可按单号或款号查询</span>
+                  </div>
+                </div>
+                <div class="actions-bar wat-cf">
+                  <div class="actions">
+                    <button class="button" type="submit">
+                      <img src="images/icons/cross.png" alt="Delete" /> Delete
+                    </button>
+                    <button id="exportExcel" class="button" type="button">
+                      <img src="images/icons/application_edit.png" alt="Delete" /> 导出报表
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <form id="exportExcelForm" action="" method="post">
+          <input id="exportOrderIds" name="exportOrderIds" type="hidden" value=""/>
+        </form>
+        <div id="footer">
+          <div class="block">
+            <p>Copyright &copy; 2010 Your Site.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="box">
+      <div class="block" id="block-signup">
+        <h2>是否验收</h2>
+        <div class="content">
+          <div class="form">
+            <div class="group wat-cf">
+              <div class="left">
+                <label class="label">验收人</label>
+              </div>
+              <div class="right">
+                <input id="checkPersonName" type="text" class="text_field" />
+                <span class="description">Ex: 验收人</span>
+              </div>
+              <input id="orderIds" type="hidden" class="text_field" />
+              <input id="Ids" type="hidden" class="text_field" />
+            </div>
+            <div class="group navform wat-cf" style="position: relative;left: 50%;margin-left: -20%;">
+              <button id="submitCheck" class="button" type="button">
+                <img src="images/icons/tick.png" alt="Save" /> 验收
+              </button>
+              <button id="cancelCheck" class="button" type="button">
+                <img src="images/icons/cross.png" alt="Save" /> 取消
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<script type="text/javascript" charset="utf-8" src="javascripts/util/util.js"></script>
+<script type="text/javascript" charset="utf-8" src="javascripts/order/order.js"></script>
+</html>
+

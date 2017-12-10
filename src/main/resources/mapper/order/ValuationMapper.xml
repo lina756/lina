@@ -1,0 +1,54 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD com.example.Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace = "angel.model.mapper.order.ValuationMapper">
+
+    <select id="selectValuations" resultType="angel.model.bo.ValuationBo">
+        SELECT *
+        FROM valuation
+        WHERE styleId = #{0}
+    </select>
+
+    <select id="selectValuationDetail" resultType="angel.model.bo.ValuationBo">
+        SELECT * FROM valuation WHERE valuationId = #{0}
+    </select>
+
+    <insert id="insertValuation" parameterType="angel.model.bo.ValuationBo" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO valuation(valuationId,valuationType,price,increasePrice,styleId) VALUES
+            (#{valuationId},#{valuationType},#{price},
+            #{increasePrice},#{styleId})
+    </insert>
+
+    <insert id="insertValuations">
+        INSERT INTO valuation(valuationId,valuationType,price,increasePrice,styleId) VALUES
+        <foreach collection="list" index="i" item="valuation" separator=",">
+            (#{valuation.valuationId},#{valuation.valuationType},#{valuation.price},
+            #{valuation.increasePrice},#{valuation.styleId})
+        </foreach>
+    </insert>
+
+    <update id="updateValuation" parameterType="angel.model.bo.ValuationBo">
+        UPDATE valuation
+        <set>
+            <if test="valuationType != null">
+                valuationType = #{valuationType},
+            </if>
+            <if test="price != null">
+                price = #{price},
+            </if>
+            <if test="increasePrice != null">
+                increasePrice = #{increasePrice},
+            </if>
+        </set>
+        WHERE valuationId = #{valuationId}
+    </update>
+
+    <delete id="deleteValuation">
+        DELETE FROM valuation WHERE valuationId = #{0}
+    </delete>
+
+    <delete id="deleteValuationByStyleId">
+        DELETE FROM valuation WHERE styleId = #{0}
+    </delete>
+</mapper>

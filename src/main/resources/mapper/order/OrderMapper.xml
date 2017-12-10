@@ -1,0 +1,154 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD com.example.Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace = "angel.model.mapper.order.OrderMapper">
+
+    <resultMap id="order" type="angel.model.bo.OrderBo">
+        <id column="orderId" property="orderId"/>
+        <result column="orderCode" property="orderCode"/>
+        <result column="createOrderPerson" property="createOrderPerson"/>
+        <collection property="orderStyleBoList" ofType="angel.model.bo.OrderStyleBo">
+            <result column="id" property="id"/>
+            <result column="workDate" property="workDate"/>
+            <result column="styleCode" property="styleCode"/>
+            <result column="styleName" property="styleName"/>
+            <result column="ascription" property="ascription"/>
+            <result column="valuationType" property="valuationType"/>
+            <result column="persons" property="persons"/>
+            <result column="count" property="count"/>
+            <result column="price" property="price"/>
+            <result column="increasePrice" property="increasePrice"/>
+            <result column="totalPrice" property="totalPrice"/>
+            <result column="checkPerson" property="checkPerson"/>
+            <result column="check" property="check"/>
+            <result column="remark" property="remark"/>
+        </collection>
+    </resultMap>
+
+    <resultMap id="orderStyle" type="angel.model.bo.OrderStyleBo">
+        <id column="id" property="id"/>
+        <result column="workDate" property="workDate"/>
+        <result column="styleCode" property="styleCode"/>
+        <result column="styleName" property="styleName"/>
+        <result column="ascription" property="ascription"/>
+        <result column="valuationType" property="valuationType"/>
+        <result column="persons" property="persons"/>
+        <result column="count" property="count"/>
+        <result column="price" property="price"/>
+        <result column="increasePrice" property="increasePrice"/>
+        <result column="totalPrice" property="totalPrice"/>
+        <result column="checkPerson" property="checkPerson"/>
+        <result column="check" property="check"/>
+        <result column="remark" property="remark"/>
+    </resultMap>
+
+    <select id="selectOrders" resultMap="order">
+        SELECT a.orderId,a.orderCode,a.createOrderPerson,b.id,
+        b.workDate,b.styleCode,b.styleName,b.ascription,b.valuationType,
+        b.persons,b.count,b.price,b.increasePrice,b.totalPrice,
+        b.checkPerson,b.check,b.remark
+        FROM orders as a
+        LEFT JOIN order_style AS b ON a.orderId = b.orderId
+        <if test="filter != null">
+            AND (a.orderCode LIKE concat(concat('%',#{filter}),'%') OR b.styleCode LIKE concat(concat('%',#{filter}),'%'))
+        </if>
+        <choose>
+            <when test="checkStatus == 0">
+                AND b.check = 0
+            </when>
+            <when test="checkStatus == 1">
+                AND b.check = 1
+            </when>
+        </choose>
+    </select>
+
+    <select id="selectOrdersInOrderIds" resultMap="order">
+         SELECT a.orderId,a.orderCode,a.createOrderPerson,b.id,
+        b.workDate,b.styleCode,b.styleName,b.ascription,b.valuationType,
+        b.persons,b.count,b.price,b.increasePrice,b.totalPrice,
+        b.checkPerson,b.check,b.remark
+        FROM orders as a
+        ,order_style AS b
+         WHERE a.orderId = b.orderId AND a.orderId IN (
+         <foreach collection="list" index="i" item="orderId" separator=",">
+             #{orderId}
+         </foreach>
+         )
+    </select>
+
+    <select id="selectOrderDetail" resultMap="order">
+        SELECT a.orderId,a.orderCode,a.createOrderPerson,b.id,
+        b.workDate,b.styleCode,b.styleName,b.ascription,b.valuationType,
+        b.persons,b.count,b.price,b.increasePrice,b.totalPrice,
+        b.checkPerson,b.check,b.remark
+        FROM orders as a
+        LEFT JOIN order_style AS b ON a.orderId = b.orderId
+        WHERE a.orderId = #{0}
+    </select>
+
+    <select id="statisticsOrderStyles" resultType="Integer">
+        SELECT count(*) FROM order_style WHERE orderId = #{0}
+    </select>
+
+    <select id="selectOrderStylesByOrderCode" resultMap="orderStyle">
+        SELECT b.* FROM orders AS a
+        ,order_style AS b
+        WHERE a.orderId = b.orderId AND a.orderCode = #{id}
+    </select>
+
+    <select id="selectOrderStyles" resultMap="orderStyle">
+         SELECT * FROM order_style WHERE styleCode = #{id}
+    </select>
+
+    <insert id="insertAscription">
+        INSERT INTO ascription(ascriptionName) VALUES 
+        <foreach collection="list" index="i" item="ascriptionName" separator=",">
+            (#{ascriptionName})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrder" parameterType="angel.model.bo.OrderBo" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO orders(orderId,orderCode,createOrderPerson,created) VALUES (#{orderId},#{orderCode},#{createOrderPerson},#{created})
+    </insert>
+
+    <insert id="insertOrderStyle" parameterType="angel.model.bo.OrderStyleBo">
+        INSERT INTO order_style(orderId,workDate,styleCode,styleName,valuationType,ascription,persons,count,price,increasePrice,totalPrice,remark) VALUES
+            (#{orderId},#{workDate},#{styleCode},#{styleName},
+            #{valuationType},#{ascription},#{persons},#{count},#{price},
+            #{increasePrice},#{totalPrice},#{remark})
+    </insert>
+
+    <update id="updateOrder" parameterType="angel.model.bo.OrderBo">
+        UPDATE orders
+        <set>
+            <if test="orderCode != null">
+                orderCode = #{orderCode},
+            </if>
+            <if test="createOrderPerson != null">
+                createOrderPerson = #{createOrderPerson},
+            </if>
+        </set>
+        WHERE orderId = #{orderId}
+    </update>
+
+    <update id="checkOrderStyle">
+        UPDATE order_style
+        <set>
+            `check` = 1,
+            checkPerson = #{checkPerson}
+        </set>
+        WHERE id IN
+        <foreach collection="orderStyleIds" index="i" item="orderStyleId" separator="," open="(" close=")">
+            #{orderStyleId}
+        </foreach>
+    </update>
+
+    <delete id="deleteOrderStyle">
+        DELETE FROM order_style WHERE orderId = #{0} AND id = #{1}
+    </delete>
+
+    <delete id="deleteOrder">
+        DELETE FROM orders WHERE orderId = #{0}
+    </delete>
+</mapper>

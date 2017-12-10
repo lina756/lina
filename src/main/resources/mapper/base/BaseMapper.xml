@@ -1,0 +1,11 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD com.example.Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace = "angel.model.mapper.base.BaseMapper">
+
+    <select id="findAll" resultType="string">
+        select nick_name from user
+    </select>
+
+</mapper>

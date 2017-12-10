@@ -1,0 +1,67 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD com.example.Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace = "angel.model.mapper.order.StyleMapper">
+
+    <resultMap id="style" type="angel.model.bo.StyleBo">
+        <id column="styleId" property="styleId"/>
+        <result column="styleCode" property="styleCode"/>
+        <result column="styleName" property="styleName"/>
+
+        <collection property="valuationBos" ofType="angel.model.bo.ValuationBo">
+            <id column="id" property="id"/>
+            <result column="valuationId" property="valuationId"/>
+            <result column="valuationType" property="valuationType"/>
+            <result column="price" property="price"/>
+            <result column="increasePrice" property="increasePrice"/>
+            <result column="valuationStyleId" property="styleId"/>
+        </collection>
+
+    </resultMap>
+
+    <select id="selectStyleOne" resultType="angel.model.vto.StyleVto">
+        SELECT a.styleId
+        ,a.styleName
+        ,b.valuationId
+        ,b.valuationType
+        ,b.price
+        ,b.increasePrice
+        FROM style as a
+        ,valuation as b
+        WHERE a.styleId = b.styleId AND b.styleId = #{0} AND b.valuationId = #{1}
+    </select>
+
+    <select id="selectStyleDetail" resultMap="style">
+        SELECT a.styleId,a.styleCode,a.styleName
+        ,b.id,b.valuationId,b.valuationType,b.price,b.increasePrice,b.styleId as valuationStyleId
+        FROM style as a
+        LEFT JOIN valuation as b ON a.styleId = b.styleId
+        WHERE a.styleId = #{0}
+    </select>
+
+    <select id="selectStyles" resultType="angel.model.bo.StyleBo">
+        SELECT id,styleId,styleName,styleCode from style
+    </select>
+
+    <insert id="insertStyle" parameterType="angel.model.bo.StyleBo">
+        INSERT INTO style(styleId,styleCode,styleName) VALUES (#{styleId},#{styleCode},#{styleName})
+    </insert>
+
+    <update id="updateStyle" parameterType="angel.model.bo.StyleBo">
+        UPDATE style
+        <set>
+            <if test="styleCode != null">
+                styleCode = #{styleCode},
+            </if>
+            <if test="styleName != null">
+                styleName = #{styleName},
+            </if>
+        </set>
+        WHERE styleId = #{styleId};
+    </update>
+
+    <delete id="deleteStyle">
+        DELETE FROM  style WHERE styleId = #{0}
+    </delete>
+</mapper>
