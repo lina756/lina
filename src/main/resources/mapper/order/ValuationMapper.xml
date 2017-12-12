@@ -5,23 +5,23 @@
 <mapper namespace = "angel.model.mapper.order.ValuationMapper">
 
     <select id="selectValuations" resultType="angel.model.bo.ValuationBo">
-        SELECT *
+        SELECT id,valuation_id as valuationId,valuation_type as valuationType,price,increase_price as increasePrice,style_id as styleId
         FROM valuation
-        WHERE styleId = #{0}
+        WHERE style_id = #{0}
     </select>
 
     <select id="selectValuationDetail" resultType="angel.model.bo.ValuationBo">
-        SELECT * FROM valuation WHERE valuationId = #{0}
+        SELECT id,valuation_id as valuationId,valuation_type as valuationType,price,increase_price as increasePrice,style_id as styleId FROM valuation WHERE valuation_id = #{0}
     </select>
 
     <insert id="insertValuation" parameterType="angel.model.bo.ValuationBo" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO valuation(valuationId,valuationType,price,increasePrice,styleId) VALUES
+        INSERT INTO valuation(valuation_id,valuation_type,price,increase_price,style_id) VALUES
             (#{valuationId},#{valuationType},#{price},
             #{increasePrice},#{styleId})
     </insert>
 
     <insert id="insertValuations">
-        INSERT INTO valuation(valuationId,valuationType,price,increasePrice,styleId) VALUES
+        INSERT INTO valuation(valuation_id,valuation_type,price,increase_price,style_id) VALUES
         <foreach collection="list" index="i" item="valuation" separator=",">
             (#{valuation.valuationId},#{valuation.valuationType},#{valuation.price},
             #{valuation.increasePrice},#{valuation.styleId})
@@ -32,23 +32,23 @@
         UPDATE valuation
         <set>
             <if test="valuationType != null">
-                valuationType = #{valuationType},
+                valuation_type = #{valuationType},
             </if>
             <if test="price != null">
                 price = #{price},
             </if>
             <if test="increasePrice != null">
-                increasePrice = #{increasePrice},
+                increase_price = #{increasePrice},
             </if>
         </set>
-        WHERE valuationId = #{valuationId}
+        WHERE valuation_id = #{valuationId}
     </update>
 
     <delete id="deleteValuation">
-        DELETE FROM valuation WHERE valuationId = #{0}
+        DELETE FROM valuation WHERE valuation_id = #{0}
     </delete>
 
     <delete id="deleteValuationByStyleId">
-        DELETE FROM valuation WHERE styleId = #{0}
+        DELETE FROM valuation WHERE style_id = #{0}
     </delete>
 </mapper>

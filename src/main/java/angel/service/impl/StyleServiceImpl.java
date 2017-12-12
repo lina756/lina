@@ -55,7 +55,6 @@ public class StyleServiceImpl implements StyleService {
         if (result <= 0 ){
             return ResponseUtils.createResponse(ResponseStatus.RESPONSE_CreateError);
         }
-        result = ascriptionMapper.insertAscription(Collections.singletonList(requestVto.getAscription()));
         return ResponseUtils.successResponse();
     }
 

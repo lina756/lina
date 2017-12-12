@@ -83,18 +83,26 @@
     $('#createStyleButton').on("click",function() {
         var styleCode = $('#styleCode').val();
         var styleName = $('#styleName').val();
-        var ascription = $('#ascription').val();
         var priceType = $('#priceType').val();
         var price = $('#price').val();
         var increasePrice = $('#increasePrice').val();
         var data = {
             styleCode:styleCode,
             styleName:styleName,
-            ascription:ascription,
             priceType:priceType,
             price:price,
             increasePrice:increasePrice
         };
+
+        function addTr(data) {
+
+        }
+
+        function createSuccess(data) {
+            $('#box').hide();
+            addTr(data.data);
+        }
+
         ajax("http://localhost:8080/SM/statistics/v1/style","post",false,data,createSuccess,error);
     });
 

@@ -36,7 +36,6 @@ public class StyleController {
     public String createStyle(@RequestBody StyleRequestVto requestVto) {
         if (CheckUtils.checkParam(requestVto.getStyleName(),
                 requestVto.getStyleCode(),
-                requestVto.getAscription(),
                 requestVto.getPriceType(),
                 requestVto.getPrice(),
                 requestVto.getIncreasePrice())) {

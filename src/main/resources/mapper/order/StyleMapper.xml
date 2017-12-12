@@ -21,47 +21,47 @@
     </resultMap>
 
     <select id="selectStyleOne" resultType="angel.model.vto.StyleVto">
-        SELECT a.styleId
-        ,a.styleName
-        ,b.valuationId
-        ,b.valuationType
+        SELECT a.style_id as styleId
+        ,a.style_name as styleName
+        ,b.valuation_id as valuationId
+        ,b.valuation_type as valuationType
         ,b.price
-        ,b.increasePrice
+        ,b.increase_price as increasePrice
         FROM style as a
         ,valuation as b
-        WHERE a.styleId = b.styleId AND b.styleId = #{0} AND b.valuationId = #{1}
+        WHERE a.style_id = b.style_id AND b.style_id = #{0} AND b.valuation_id = #{1}
     </select>
 
     <select id="selectStyleDetail" resultMap="style">
-        SELECT a.styleId,a.styleCode,a.styleName
-        ,b.id,b.valuationId,b.valuationType,b.price,b.increasePrice,b.styleId as valuationStyleId
+        SELECT a.style_id as styleId,a.style_code as styleCode,a.style_name as styleName
+        ,b.id,b.valuation_id as valuationId,b.valuation_type as valuationType,b.price,b.increase_price as increasePrice,b.style_id as valuationStyleId
         FROM style as a
-        LEFT JOIN valuation as b ON a.styleId = b.styleId
-        WHERE a.styleId = #{0}
+        LEFT JOIN valuation as b ON a.style_id = b.style_id
+        WHERE a.style_id = #{0}
     </select>
 
     <select id="selectStyles" resultType="angel.model.bo.StyleBo">
-        SELECT id,styleId,styleName,styleCode from style
+        SELECT id,style_id as styleId,style_name as styleName,style_code as styleCode from style
     </select>
 
     <insert id="insertStyle" parameterType="angel.model.bo.StyleBo">
-        INSERT INTO style(styleId,styleCode,styleName) VALUES (#{styleId},#{styleCode},#{styleName})
+        INSERT INTO style(style_id,style_code,style_name) VALUES (#{styleId},#{styleCode},#{styleName})
     </insert>
 
     <update id="updateStyle" parameterType="angel.model.bo.StyleBo">
         UPDATE style
         <set>
             <if test="styleCode != null">
-                styleCode = #{styleCode},
+                style_code = #{styleCode},
             </if>
             <if test="styleName != null">
-                styleName = #{styleName},
+                style_name = #{styleName},
             </if>
         </set>
-        WHERE styleId = #{styleId};
+        WHERE style_id = #{styleId};
     </update>
 
     <delete id="deleteStyle">
-        DELETE FROM  style WHERE styleId = #{0}
+        DELETE FROM  style WHERE style_id = #{0}
     </delete>
 </mapper>

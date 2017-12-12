@@ -5,11 +5,11 @@
 <mapper namespace = "angel.model.mapper.order.AscriptionMapper">
 
     <select id="selectAscriptions" resultType="angel.model.bo.AscriptionBo">
-        SELECT id,ascriptionName FROM ascription
+        SELECT id,ascription_name as ascriptionName FROM ascription
     </select>
 
     <insert id="insertAscription">
-        INSERT INTO ascription(ascriptionName) VALUES 
+        INSERT INTO ascription(ascription_name) VALUES
         <foreach collection="list" index="i" item="ascriptionName" separator=",">
             (#{ascriptionName})
         </foreach>

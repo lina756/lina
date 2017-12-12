@@ -25,7 +25,6 @@ $(document).on("click","#toStyleList",function() {
 var error = function() {
     console.log("处理失败");
 };
-commonHtml.push("<li class='first'><a id='createStyle' href='javascript:void(0)'>新增款式</a></li>");
 function ajax(url,method,async,data,success,error){
     var aj = $.ajax({
         url:url,

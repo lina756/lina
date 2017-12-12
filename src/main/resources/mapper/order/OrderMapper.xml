@@ -44,14 +44,14 @@
     </resultMap>
 
     <select id="selectOrders" resultMap="order">
-        SELECT a.orderId,a.orderCode,a.createOrderPerson,b.id,
-        b.workDate,b.styleCode,b.styleName,b.ascription,b.valuationType,
-        b.persons,b.count,b.price,b.increasePrice,b.totalPrice,
-        b.checkPerson,b.check,b.remark
+        SELECT a.order_id as orderId,a.order_code as orderCode,a.create_order_person as createOrderPerson,b.id,
+        b.work_date as workDate,b.style_code as styleCode,b.style_name as styleName,b.ascription,b.valuation_type as valuationType,
+        b.persons,b.count,b.price,b.increase_price as increasePrice,b.total_price as totalPrice,
+        b.check_person as checkPerson,b.check,b.remark
         FROM orders as a
-        LEFT JOIN order_style AS b ON a.orderId = b.orderId
-        <if test="filter != null">
-            AND (a.orderCode LIKE concat(concat('%',#{filter}),'%') OR b.styleCode LIKE concat(concat('%',#{filter}),'%'))
+        LEFT JOIN order_style AS b ON a.order_id = b.order_id
+        <if test="filter != null and filter !=''">
+            AND (a.order_code LIKE concat(concat('%',#{filter}),'%') OR b.style_code LIKE concat(concat('%',#{filter}),'%'))
         </if>
         <choose>
             <when test="checkStatus == 0">
@@ -64,13 +64,13 @@
     </select>
 
     <select id="selectOrdersInOrderIds" resultMap="order">
-         SELECT a.orderId,a.orderCode,a.createOrderPerson,b.id,
-        b.workDate,b.styleCode,b.styleName,b.ascription,b.valuationType,
-        b.persons,b.count,b.price,b.increasePrice,b.totalPrice,
-        b.checkPerson,b.check,b.remark
+         SELECT a.order_id as orderId,a.order_code as orderCode,a.create_order_person as createOrderPerson,b.id,
+        b.work_date as workDate,b.style_code as styleCode,b.style_name as styleName,b.ascription,b.valuation_type as valuationType,
+        b.persons,b.count,b.price,b.increase_price as increasePrice,b.total_price as totalPrice,
+        b.check_person as checkPerson,b.check,b.remark
         FROM orders as a
         ,order_style AS b
-         WHERE a.orderId = b.orderId AND a.orderId IN (
+         WHERE a.order_id = b.order_id AND a.order_id IN (
          <foreach collection="list" index="i" item="orderId" separator=",">
              #{orderId}
          </foreach>
@@ -78,27 +78,29 @@
     </select>
 
     <select id="selectOrderDetail" resultMap="order">
-        SELECT a.orderId,a.orderCode,a.createOrderPerson,b.id,
-        b.workDate,b.styleCode,b.styleName,b.ascription,b.valuationType,
-        b.persons,b.count,b.price,b.increasePrice,b.totalPrice,
-        b.checkPerson,b.check,b.remark
+        SELECT a.order_id as orderId,a.order_code as orderCode,a.create_order_person as createOrderPerson,b.id,
+        b.work_date as workDate,b.style_code as styleCode,b.style_name as styleName,b.ascription,b.valuation_type as valuationType,
+        b.persons,b.count,b.price,b.increase_price as increasePrice,b.total_price as totalPrice,
+        b.check_person as checkPerson,b.check,b.remark
         FROM orders as a
-        LEFT JOIN order_style AS b ON a.orderId = b.orderId
-        WHERE a.orderId = #{0}
+        LEFT JOIN order_style AS b ON a.order_id = b.order_id
+        WHERE a.order_id = #{0}
     </select>
 
     <select id="statisticsOrderStyles" resultType="Integer">
-        SELECT count(*) FROM order_style WHERE orderId = #{0}
+        SELECT count(*) FROM order_style WHERE order_id = #{0}
     </select>
 
     <select id="selectOrderStylesByOrderCode" resultMap="orderStyle">
-        SELECT b.* FROM orders AS a
+        SELECT b.order_id as orderId,b.work_date as workDate,b.style_code as styleCode,b.style_name as styleName,
+        b.valuation_type as valuationType,b.price,b.count,b.total_price as totalPrice,b.check,b.check_person as checkPerson,
+        b.remark FROM orders AS a
         ,order_style AS b
-        WHERE a.orderId = b.orderId AND a.orderCode = #{id}
+        WHERE a.order_id = b.order_id AND a.order_code = #{id}
     </select>
 
     <select id="selectOrderStyles" resultMap="orderStyle">
-         SELECT * FROM order_style WHERE styleCode = #{id}
+         SELECT * FROM order_style WHERE style_code = #{id}
     </select>
 
     <insert id="insertAscription">
@@ -109,11 +111,11 @@
     </insert>
 
     <insert id="insertOrder" parameterType="angel.model.bo.OrderBo" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
-        INSERT INTO orders(orderId,orderCode,createOrderPerson,created) VALUES (#{orderId},#{orderCode},#{createOrderPerson},#{created})
+        INSERT INTO orders(order_id,order_code,create_order_person,created) VALUES (#{orderId},#{orderCode},#{createOrderPerson},#{created})
     </insert>
 
     <insert id="insertOrderStyle" parameterType="angel.model.bo.OrderStyleBo">
-        INSERT INTO order_style(orderId,workDate,styleCode,styleName,valuationType,ascription,persons,count,price,increasePrice,totalPrice,remark) VALUES
+        INSERT INTO order_style(order_id,work_date,style_code,style_name,valuation_type,ascription,persons,"count",price,increase_price,total_price,remark) VALUES
             (#{orderId},#{workDate},#{styleCode},#{styleName},
             #{valuationType},#{ascription},#{persons},#{count},#{price},
             #{increasePrice},#{totalPrice},#{remark})
@@ -123,20 +125,20 @@
         UPDATE orders
         <set>
             <if test="orderCode != null">
-                orderCode = #{orderCode},
+                order_code = #{orderCode},
             </if>
             <if test="createOrderPerson != null">
-                createOrderPerson = #{createOrderPerson},
+                create_order_person = #{createOrderPerson},
             </if>
         </set>
-        WHERE orderId = #{orderId}
+        WHERE order_id = #{orderId}
     </update>
 
     <update id="checkOrderStyle">
         UPDATE order_style
         <set>
-            `check` = 1,
-            checkPerson = #{checkPerson}
+            "check" = 1,
+            check_person = #{checkPerson}
         </set>
         WHERE id IN
         <foreach collection="orderStyleIds" index="i" item="orderStyleId" separator="," open="(" close=")">
@@ -145,10 +147,10 @@
     </update>
 
     <delete id="deleteOrderStyle">
-        DELETE FROM order_style WHERE orderId = #{0} AND id = #{1}
+        DELETE FROM order_style WHERE order_id = #{0} AND id = #{1}
     </delete>
 
     <delete id="deleteOrder">
-        DELETE FROM orders WHERE orderId = #{0}
+        DELETE FROM orders WHERE order_id = #{0}
     </delete>
 </mapper>
