@@ -124,7 +124,7 @@
             }
             $('#valuationType').append(result.join(""));
         }
-        ajax("http://localhost:8080/SM/statistics/v1/valuation?styleId="+styleId, "get", false, null, initValuationList, error);
+        ajax("http://106.15.200.24:8080/SM/statistics/v1/valuation?styleId="+styleId, "get", false, null, initValuationList, error);
     });
 
     function initBox() {
@@ -240,14 +240,14 @@
             addTr(data.data);
         }
 
-        ajax("http://localhost:8080/SM/statistics/v1/orderStyle","post",false,data,returnSuccess,error);
+        ajax("http://106.15.200.24:8080/SM/statistics/v1/orderStyle","post",false,data,returnSuccess,error);
     });
 
     function initHtml() {
         var orderId = localStorage.getItem("orderId");
         if (orderId !== null && orderId !== undefined && orderId !== "") {
-            ajax("http://localhost:8080/SM/statistics/v1/orderDetail?orderId=" + orderId, "get", false, null, initOrderDetail, error);
-            ajax("http://localhost:8080/SM/statistics/v1/styles", "get", false, null, initStyleList, error);
+            ajax("http://106.15.200.24:8080/SM/statistics/v1/orderDetail?orderId=" + orderId, "get", false, null, initOrderDetail, error);
+            ajax("http://106.15.200.24:8080/SM/statistics/v1/styles", "get", false, null, initStyleList, error);
         }
     }
 
@@ -266,7 +266,7 @@
         function returnSuccess(data) {
             $("#"+data.data).remove();
         }
-        ajax("http://localhost:8080/SM/statistics/v1/orderStyle?orderId="+orderId+"&id="+id,"delete",false,null,returnSuccess,error);
+        ajax("http://106.15.200.24:8080/SM/statistics/v1/orderStyle?orderId="+orderId+"&id="+id,"delete",false,null,returnSuccess,error);
     });
 
     $('#addOrderStyle').on("click",function () {
@@ -275,7 +275,7 @@
     });
 
     $('#cancelEdit').on("click",function() {
-       window.location.href="http://localhost:8080/SM/index/order.html";
+       window.location.href="http://106.15.200.24:8080/SM/index/order.html";
     });
 
     $('#submitEdit').on("click",function() {
@@ -290,10 +290,10 @@
         };
 
         function returnSuccess(data) {
-            window.location.href="http://localhost:8080/SM/index/order.html";
+            window.location.href="http://106.15.200.24:8080/SM/index/order.html";
         }
 
-        ajax("http://localhost:8080/SM/statistics/v1/order","put",false,data,returnSuccess,error);
+        ajax("http://106.15.200.24:8080/SM/statistics/v1/order","put",false,data,returnSuccess,error);
     });
 
     initHtml();

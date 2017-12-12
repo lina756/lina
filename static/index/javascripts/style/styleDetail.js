@@ -60,7 +60,7 @@
 
     function initHtml() {
         var styleId = localStorage.getItem("styleId");
-        ajax("http://localhost:8080/SM/statistics/v1/styleDetail?styleId="+styleId,"get",false,null,initStyleDetail,error);
+        ajax("http://106.15.200.24:8080/SM/statistics/v1/styleDetail?styleId="+styleId,"get",false,null,initStyleDetail,error);
     }
 
     function changeValuationForm() {
