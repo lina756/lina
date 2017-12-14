@@ -12,7 +12,7 @@
                 result.push("<tr class='odd' id='"+resultSet[i].orderId+resultSet[i].id+"'>");
             }
             result.push("<td>");
-            result.push("<input type='checkbox' class='checkbox' name='id' value='"+resultSet[i].orderId+"' />");
+            result.push("<input type='checkbox' class='checkbox' name='id' value='"+resultSet[i].orderId +"|"+ resultSet[i].id+"' />");
             result.push("</td>");
 
             result.push("<td>");
@@ -192,11 +192,49 @@
         ajax("http://localhost:8080/SM/statistics/v1/statisticsResult?id="+id+"&type="+statisticsType,"GET",false,null,resultSeccess,error);
     });
 
+    $('#batchDelete').on("click",function() {
+        var r=confirm("是否真的要删除？");
+        if (r === false) {
+            return;
+        }
+
+        var result = [];
+        $('#orderStyleTable tbody .checkbox').each(function() {
+            if($(this).attr("checked") === "checked") {
+                var value = $(this).attr("value");
+                result.push(value);
+            }
+        });
+        var orderStyleIds = result.join(",");
+        var orderId = localStorage.getItem("orderId");
+
+        function returnSuccess(data) {
+            var isDeleteOrder = data.data.isDeleteOrder;
+            if (isDeleteOrder) {
+                window.location.href = "http://localhost:8080/SM/index/order.html";
+            }else {
+                var orderStyleIds = data.data.orderStyleIds;
+                for (var i in orderStyleIds) {
+                    $('#' + orderStyleIds[i]).remove();
+                }
+            }
+        }
+
+        var data = {
+            orderStyleIds:orderStyleIds,
+            orderId:orderId
+        };
+
+        ajax("http://localhost:8080/SM/statistics/v1/order/batchDelete","POST",false,data,returnSuccess,error);
+    });
+
     $('#exportExcel').on("click",function() {
         var result = [];
         $('#styleTable tbody .checkbox').each(function() {
-            var value = $(this).attr("value");
-            result.push(value);
+            if ($(this).attr("checked") === "checked") {
+                var value = $(this).attr("value");
+                result.push(value);
+            }
         });
         var orderIds = result.join(",");
         var data = {
