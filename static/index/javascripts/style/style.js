@@ -6,7 +6,7 @@
         localStorage.clear();
         var page = 1;
         var pageSize = 10;
-        ajax("http://106.15.200.24:8080/SM/statistics/v1/styles?page="+page+"&pageSize="+pageSize,"get",false,null,render,error);
+        ajax("http://localhost:8080/SM/statistics/v1/styles?page="+page+"&pageSize="+pageSize,"get",false,null,render,error);
     }
     function init() {
         $('#styleCode').val("");
@@ -30,7 +30,6 @@
     }
 
     function deleteSuccess(data) {
-        alert(data.message);
         init();
         initTable();
     }
@@ -103,14 +102,14 @@
             addTr(data.data);
         }
 
-        ajax("http://106.15.200.24:8080/SM/statistics/v1/style","post",false,data,createSuccess,error);
+        ajax("http://localhost:8080/SM/statistics/v1/style","post",false,data,createSuccess,error);
     });
 
     $(document).on("click",'.editStyle',function () {
         var styleId = $(this).attr("text");
         console.log(styleId);
         localStorage.setItem("styleId",styleId);
-        window.location.href="http://106.15.200.24:8080/SM/index/styleDetail.html";
+        window.location.href="http://localhost:8080/SM/index/styleDetail.html";
     });
 
     $(document).on("click",".delStyle",function () {
@@ -122,7 +121,7 @@
         console.log(styleId)
 
         ajax(
-            "http://106.15.200.24:8080/SM/statistics/v1/style?styleId="+styleId,
+            "http://localhost:8080/SM/statistics/v1/style?styleId="+styleId,
             "delete",
             false,
             null,

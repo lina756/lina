@@ -18,6 +18,8 @@ import angel.util.ExcelUtil;
 import angel.util.ResponseStatus;
 import angel.util.ResponseUtils;
 import com.alibaba.druid.util.StringUtils;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -132,7 +134,14 @@ public class OrderServiceImpl implements OrderService {
         if (result <= 0) {
             return ResponseUtils.createResponse(ResponseStatus.UNDEFIND_UNLL_ORDER);
         }
-        return ResponseUtils.successResponse(id);
+        JsonObject response = new JsonObject();
+        response.addProperty("id",id);
+        int count = orderMapper.statisticsOrderStyles(orderId);
+        if (count == 0) {
+            orderMapper.deleteOrder(orderId);
+            response.addProperty("isDeleteOrder",true);
+        }
+        return ResponseUtils.successResponse(response);
 
     }
 
@@ -224,6 +233,25 @@ public class OrderServiceImpl implements OrderService {
         }
         ExcelUtil.exportOrderExcel(completeOrderVtos,response.getOutputStream());
         return ResponseUtils.successResponse();
+    }
+
+    @Transactional
+    @Override
+    public String batchDeleteOrderStyle(String orderId, String orderStyleIds) {
+        List<String> orderStyleIdList = Arrays.asList(orderStyleIds.split(","));
+        List<Integer> ids = new ArrayList<Integer>();
+        for (String orderStyleId : orderStyleIdList) {
+            ids.add(StringUtils.stringToInteger(orderStyleId));
+        }
+        orderMapper.batchDeleteOrderStyle(orderId,ids);
+        int count = orderMapper.statisticsOrderStyles(orderId);
+        JsonObject result = new JsonObject();
+        result.add("orderStyleIds",new Gson().toJsonTree(orderStyleIdList));
+        if (count == 0) {
+            orderMapper.deleteOrder(orderId);
+            result.addProperty("isDeleteOrder",true);
+        }
+        return ResponseUtils.successResponse(result);
     }
 
 }

@@ -90,12 +90,16 @@
 
 
             result.push("<td class='last'>");
-            result.push("<a text='"+resultSet[i].id+"' class='editOrderStyle' href='javascript:void(0)'>编辑</a> |<a text='"+resultSet[i].id+"' class='checkOrderStyle' href='javascript:void(0)'>验收</a> | <a text='"+resultSet[i].id+"' class='delOrderStyle' href='javascript:void(0)'>删除</a>");
+            result.push("<a text='"+resultSet[i].id+"' class='editOrderStyle' href='javascript:void(0)'>编辑</a> ");
+            if (resultSet[i].check === 0) {
+                result.push("|<a text='"+resultSet[i].id+"' class='checkOrderStyle' href='javascript:void(0)'>验收</a>");
+            }
+            result.push("| <a text='"+resultSet[i].id+"' class='delOrderStyle' href='javascript:void(0)'>删除</a>");
             result.push("</td>");
 
             result.push("</tr>");
 
-            $('#valuationTable tbody').append(result.join(""));
+            $('#orderStyleTable tbody').append(result.join(""));
         }
     }
 
@@ -124,7 +128,7 @@
             }
             $('#valuationType').append(result.join(""));
         }
-        ajax("http://106.15.200.24:8080/SM/statistics/v1/valuation?styleId="+styleId, "get", false, null, initValuationList, error);
+        ajax("http://localhost:8080/SM/statistics/v1/valuation?styleId="+styleId, "get", false, null, initValuationList, error);
     });
 
     function initBox() {
@@ -163,7 +167,7 @@
 
         function addTr(data) {
             var result = [];
-            var size = $('#valuationTable tbody').children('tr').length;
+            var size = $('#orderStyleTable tbody').children('tr').length;
             if (size%2 === 0) {
                 result.push("<tr id='"+data.id+"' class='even'>");
             }else {
@@ -226,12 +230,16 @@
             result.push("</td>");
 
             result.push("<td class='last'>");
-            result.push("<a text='"+data.id+"' class='editOrderStyle' href='javascript:void(0)'>编辑</a> |<a text='"+data.id+"' class='checkOrderStyle' href='javascript:void(0)'>验收</a> | <a text='"+data.id+"' class='delOrderStyle' href='javascript:void(0)'>删除</a>");
+            result.push("<a text='"+data.id+"' class='editOrderStyle' href='javascript:void(0)'>编辑</a> ");
+            if (data.check === 0) {
+                result.push("|<a text='"+data.id+"' class='checkOrderStyle' href='javascript:void(0)'>验收</a>");
+            }
+            result.push("| <a text='"+data.id+"' class='delOrderStyle' href='javascript:void(0)'>删除</a>");
             result.push("</td>");
 
             result.push("</tr>");
 
-            $('#valuationTable tbody').append(result.join(""));
+            $('#orderStyleTable tbody').append(result.join(""));
         }
 
         function returnSuccess(data) {
@@ -240,14 +248,14 @@
             addTr(data.data);
         }
 
-        ajax("http://106.15.200.24:8080/SM/statistics/v1/orderStyle","post",false,data,returnSuccess,error);
+        ajax("http://localhost:8080/SM/statistics/v1/orderStyle","post",false,data,returnSuccess,error);
     });
 
     function initHtml() {
         var orderId = localStorage.getItem("orderId");
         if (orderId !== null && orderId !== undefined && orderId !== "") {
-            ajax("http://106.15.200.24:8080/SM/statistics/v1/orderDetail?orderId=" + orderId, "get", false, null, initOrderDetail, error);
-            ajax("http://106.15.200.24:8080/SM/statistics/v1/styles", "get", false, null, initStyleList, error);
+            ajax("http://localhost:8080/SM/statistics/v1/orderDetail?orderId=" + orderId, "get", false, null, initOrderDetail, error);
+            ajax("http://localhost:8080/SM/statistics/v1/styles", "get", false, null, initStyleList, error);
         }
     }
 
@@ -257,16 +265,22 @@
     });
 
     $(document).on("click",".delOrderStyle",function() {
-        var r=confirm("是否真的要删除？")
+        var r=confirm("是否真的要删除？");
         if (r === false) {
             return;
         }
         var id = $(this).attr("text");
         var orderId = localStorage.getItem("orderId");
         function returnSuccess(data) {
-            $("#"+data.data).remove();
+            var isDeleteOrder = data.data.isDeleteOrder;
+            if (isDeleteOrder) {
+                window.location.href = "http://localhost:8080/SM/index/order.html";
+            }else {
+                var id = data.data.id;
+                $("#" + id).remove();
+            }
         }
-        ajax("http://106.15.200.24:8080/SM/statistics/v1/orderStyle?orderId="+orderId+"&id="+id,"delete",false,null,returnSuccess,error);
+        ajax("http://localhost:8080/SM/statistics/v1/orderStyle?orderId="+orderId+"&id="+id,"delete",false,null,returnSuccess,error);
     });
 
     $('#addOrderStyle').on("click",function () {
@@ -275,7 +289,7 @@
     });
 
     $('#cancelEdit').on("click",function() {
-       window.location.href="http://106.15.200.24:8080/SM/index/order.html";
+       window.location.href="http://localhost:8080/SM/index/order.html";
     });
 
     $('#submitEdit').on("click",function() {
@@ -290,10 +304,75 @@
         };
 
         function returnSuccess(data) {
-            window.location.href="http://106.15.200.24:8080/SM/index/order.html";
+            window.location.href="http://localhost:8080/SM/index/order.html";
         }
 
-        ajax("http://106.15.200.24:8080/SM/statistics/v1/order","put",false,data,returnSuccess,error);
+        ajax("http://localhost:8080/SM/statistics/v1/order","put",false,data,returnSuccess,error);
+    });
+
+    $(document).on("click",".checkOrderStyle",function() {
+        var id = $(this).attr("text");
+        $('#Ids').val(id);
+        $('#checkBox').toggle();
+    });
+
+    $('#submitCheck').on("click",function () {
+        var ids = $('#Ids').val();
+        var checkPersonName = $('#checkPersonName').val();
+        var data = {
+            ids:ids,
+            checkPersonName:checkPersonName
+        };
+
+        function returnSuccess(data) {
+            initBox();
+            $('#checkBox').toggle();
+            $('#orderStyleTable tbody').empty();
+            initHtml();
+        }
+
+        ajax("http://localhost:8080/SM/statistics/v1/check","PUT",false,data,returnSuccess,error);
+    });
+
+    $('#cancelCheck').on("click",function() {
+        initBox();
+        $('#checkBox').toggle();
+    });
+
+    $('#batchDelete').on("click",function() {
+        var r=confirm("是否真的要删除？");
+        if (r === false) {
+            return;
+        }
+
+        var result = [];
+        $('#orderStyleTable tbody .checkbox').each(function() {
+            if($(this).attr("checked") === "checked") {
+                var value = $(this).attr("value");
+                result.push(value);
+            }
+        });
+        var orderStyleIds = result.join(",");
+        var orderId = localStorage.getItem("orderId");
+
+        function returnSuccess(data) {
+            var isDeleteOrder = data.data.isDeleteOrder;
+            if (isDeleteOrder) {
+                window.location.href = "http://localhost:8080/SM/index/order.html";
+            }else {
+                var orderStyleIds = data.data.orderStyleIds;
+                for (var i in orderStyleIds) {
+                    $('#' + orderStyleIds[i]).remove();
+                }
+            }
+        }
+
+        var data = {
+            orderStyleIds:orderStyleIds,
+            orderId:orderId
+        };
+
+        ajax("http://localhost:8080/SM/statistics/v1/order/batchDelete","POST",false,data,returnSuccess,error);
     });
 
     initHtml();

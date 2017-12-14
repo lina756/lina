@@ -7,6 +7,7 @@ import angel.model.vto.OrderVto;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 /**
  *
@@ -85,5 +86,15 @@ public interface OrderService {
      */
     String statisticsResult(String id,Integer statisticsType);
 
+    /**
+     * 导出报表
+     *
+     * @param response
+     * @param orderIds
+     * @return
+     * @throws IOException
+     */
     String exportExcel(HttpServletResponse response,String orderIds) throws IOException;
+
+    String batchDeleteOrderStyle(String orderId,String orderStyleIds);
 }

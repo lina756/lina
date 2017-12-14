@@ -100,7 +100,10 @@
     </select>
 
     <select id="selectOrderStyles" resultMap="orderStyle">
-         SELECT * FROM order_style WHERE style_code = #{id}
+         SELECT order_id as orderId,work_date as workDate,style_code as styleCode,style_name as styleName,
+         valuation_type as valuationType,ascription,persons,"count",price,
+         increase_price as increasePrice,total_price as totalPrice,"check",check_person as checkPerson,remark
+         FROM order_style WHERE style_code = #{id}
     </select>
 
     <insert id="insertAscription">
@@ -114,7 +117,7 @@
         INSERT INTO orders(order_id,order_code,create_order_person,created) VALUES (#{orderId},#{orderCode},#{createOrderPerson},#{created})
     </insert>
 
-    <insert id="insertOrderStyle" parameterType="angel.model.bo.OrderStyleBo">
+    <insert id="insertOrderStyle" parameterType="angel.model.bo.OrderStyleBo" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO order_style(order_id,work_date,style_code,style_name,valuation_type,ascription,persons,"count",price,increase_price,total_price,remark) VALUES
             (#{orderId},#{workDate},#{styleCode},#{styleName},
             #{valuationType},#{ascription},#{persons},#{count},#{price},
@@ -152,5 +155,13 @@
 
     <delete id="deleteOrder">
         DELETE FROM orders WHERE order_id = #{0}
+    </delete>
+
+    <delete id="batchDeleteOrderStyle">
+        DELETE FROM order_style WHERE order_id = #{orderId} AND id IN (
+        <foreach collection="list" index="i" item="id" separator=",">
+            #{id}
+        </foreach>
+        )
     </delete>
 </mapper>

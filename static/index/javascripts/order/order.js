@@ -95,7 +95,7 @@
 
     function initHtml() {
         localStorage.clear();
-        ajax("http://106.15.200.24:8080/SM/statistics/v1/orders","get",false,null,initOrderList,error);
+        ajax("http://localhost:8080/SM/statistics/v1/orders","get",false,null,initOrderList,error);
     };
 
     $('#selectOrder').on("click",function() {
@@ -105,14 +105,14 @@
             $('#styleTable tbody').empty();
             initOrderList(data);
         }
-        ajax("http://106.15.200.24:8080/SM/statistics/v1/orders?filter="+filter+"&checkStatus="+checkStatus,"get",false,null,resultSuccess,error);
+        ajax("http://localhost:8080/SM/statistics/v1/orders?filter="+filter+"&checkStatus="+checkStatus,"get",false,null,resultSuccess,error);
     });
 
     $(document).on("click",".editOrder",function() {
         var ids = $(this).attr("text").split("|");
         var orderId = ids[0];
         localStorage.setItem("orderId",orderId);
-        window.location.href = "http://106.15.200.24:8080/SM/index/orderDetail.html";
+        window.location.href = "http://localhost:8080/SM/index/orderDetail.html";
     });
 
     $(document).on("click",".delOrder",function() {
@@ -127,7 +127,7 @@
             var realId = data.data+id;
             $('#'+realId).remove();
         }
-       ajax("http://106.15.200.24:8080/SM/statistics/v1/order?orderId="+orderId+"&id="+id,"delete",false,null,returnSuccess,error);
+       ajax("http://localhost:8080/SM/statistics/v1/order?orderId="+orderId+"&id="+id,"delete",false,null,returnSuccess,error);
     });
 
     function initBox() {
@@ -158,7 +158,7 @@
             initHtml();
         }
 
-        ajax("http://106.15.200.24:8080/SM/statistics/v1/check","PUT",false,data,returnSuccess,error);
+        ajax("http://localhost:8080/SM/statistics/v1/check","PUT",false,data,returnSuccess,error);
     });
 
     $('#cancelCheck').on("click",function() {
@@ -189,11 +189,7 @@
             $('#statisticsResult').html(result.join(""));
         }
 
-        ajax("http://106.15.200.24:8080/SM/statistics/v1/statisticsResult?id="+id+"&type="+statisticsType,"GET",false,null,resultSeccess,error);
-    });
-
-    $('#exportExcelForm').submit(function () {
-        console.log("发送表单");
+        ajax("http://localhost:8080/SM/statistics/v1/statisticsResult?id="+id+"&type="+statisticsType,"GET",false,null,resultSeccess,error);
     });
 
     $('#exportExcel').on("click",function() {
@@ -208,7 +204,7 @@
         };
 
         $('#exportOrderIds').val(orderIds);
-        $('#exportExcelForm').attr("action","http://106.15.200.24:8080/SM/statistics/v1/exportExcel");
+        $('#exportExcelForm').attr("action","http://localhost:8080/SM/statistics/v1/exportExcel");
         $('#exportExcelForm').submit();
     });
 

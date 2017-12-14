@@ -21,7 +21,9 @@ public interface OrderMapper {
     void deleteOrder(String orderId);
     void checkOrderStyle(@Param("orderStyleIds")List<Integer> orderStyleIds,
                          @Param("checkPerson")String checkPerson);
+    void batchDeleteOrderStyle(@Param("orderId")String orderId,@Param("list")List<Integer> orderStyleIds);
     List<OrderStyleBo> selectOrderStylesByOrderCode(@Param("id")String id);
     List<OrderStyleBo> selectOrderStyles(@Param("id")String id);
     List<OrderBo> selectOrdersInOrderIds(@Param("list")List<String> orderIds);
+
 }

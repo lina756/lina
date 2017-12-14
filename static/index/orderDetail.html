@@ -99,7 +99,7 @@
             <div class="inner">
               <div class="actions-bar wat-cf">
                 <div class="actions">
-                  <button class="button" type="button">
+                  <button id="batchDelete" class="button" type="button">
                     <img src="images/icons/cross.png" alt="Delete" /> Delete
                   </button>
                   <button id="addOrderStyle" class="button" type="button">
@@ -108,7 +108,7 @@
                 </div>
               </div>
               <form action="#" class="form">
-                <table id="valuationTable" class="table">
+                <table id="orderStyleTable" class="table">
                   <thead>
                     <tr>
                       <th class="first"><input type="checkbox" class="checkbox toggle" /></th>
@@ -236,6 +236,36 @@
               <div class="group navform wat-cf">
                 <button id="createOrderStyle" class="button" type="button">
                   <img src="images/icons/tick.png" alt="Save" /> 关联
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="checkBox">
+        <div class="block" id="block-signup1">
+          <h2>验收</h2>
+          <div class="content">
+            <div class="form">
+              <div class="group wat-cf">
+                <div class="left">
+                  <label class="label">验收人</label>
+                </div>
+                <div class="right">
+                  <input id="checkPersonName" type="text" class="text_field" />
+                  <span class="description">Ex: 验收人</span>
+                </div>
+              </div>
+
+              <input type="hidden" id="Ids"/>
+
+              <div class="group navform wat-cf">
+                <button id="submitCheck" class="button" type="button">
+                  <img src="images/icons/tick.png" alt="Save" /> 验收
+                </button>
+                <button id="cancelCheck" class="button" type="button">
+                  <img src="images/icons/cross.png" alt="Save" /> 取消
                 </button>
               </div>
             </div>

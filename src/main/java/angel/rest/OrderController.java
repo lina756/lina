@@ -1,6 +1,7 @@
 package angel.rest;
 
 import angel.model.vo.OrderStyleVo;
+import angel.model.vto.BatchDeleteOrderRequestVto;
 import angel.model.vto.CheckVto;
 import angel.model.vto.OrderStyleVto;
 import angel.model.vto.OrderVto;
@@ -123,7 +124,6 @@ public class OrderController {
 
     @RequestMapping(value = "/statistics/v1/exportExcel",method = RequestMethod.POST)
     public void reportExcel(HttpServletResponse response, HttpServletRequest request) {
-        System.out.println(request.getParameterNames().toString());
         String orderIds = request.getParameter("exportOrderIds");
         if (null == orderIds
                 || "".equals(orderIds.replaceAll(" ", ""))) {
@@ -138,5 +138,17 @@ public class OrderController {
         if (result != null) {
             log.info(ResponseStatus.RESPONSE_Success.message);
         }
+    }
+
+    @RequestMapping(value = "/statistics/v1/order/batchDelete",method = RequestMethod.POST)
+    public String batchDeleteOrderStyle(@RequestBody BatchDeleteOrderRequestVto batchDeleteOrderRequestVto) {
+        if (null == batchDeleteOrderRequestVto
+                || null == batchDeleteOrderRequestVto.getOrderId()
+                || "".equals(batchDeleteOrderRequestVto.getOrderStyleIds().replaceAll(" ",""))
+                || null == batchDeleteOrderRequestVto.getOrderStyleIds()
+                || "".equals(batchDeleteOrderRequestVto.getOrderStyleIds().replaceAll(" ",""))) {
+            return ResponseUtils.createResponse(ResponseStatus.PESPONSE_ParamNull);
+        }
+        return orderService.batchDeleteOrderStyle(batchDeleteOrderRequestVto.getOrderId(),batchDeleteOrderRequestVto.getOrderStyleIds());
     }
 }
