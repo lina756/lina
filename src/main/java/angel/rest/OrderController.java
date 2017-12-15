@@ -13,6 +13,7 @@ import org.apache.commons.collections.MapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -48,6 +49,15 @@ public class OrderController {
     public String selectOrders(@RequestParam(value = "filter",required = false) String filter,
         @RequestParam(value = "checkStatus",required = false,defaultValue = "-1") Integer checkStatus) {
         return orderService.selectOrders(filter,checkStatus);
+    }
+
+    @RequestMapping(value = "/statistics/v1/orders/batchDelete", method = RequestMethod.POST)
+    public String batchOrders(@RequestBody Map<String,Object> map) {
+        if (null == map
+                || StringUtils.isEmpty(MapUtils.getString(map,"orderIds"))) {
+            return ResponseUtils.createResponse(ResponseStatus.PESPONSE_ParamNull);
+        }
+        return orderService.batchOrders(MapUtils.getString(map,"orderIds"));
     }
 
     @RequestMapping(value = "/statistics/v1/orderDetail", method = RequestMethod.GET)
@@ -100,6 +110,33 @@ public class OrderController {
         return orderService.createOrderStyle(orderVto);
     }
 
+    @RequestMapping(value = "/statistics/v1/orderStyle", method = RequestMethod.GET)
+    public String orderStyleDetail(@RequestParam Integer orderStyleId) {
+        if (null == orderStyleId) {
+            return ResponseUtils.createResponse(ResponseStatus.PESPONSE_ParamNull);
+        }
+        return orderService.selectOrderStyleDetail(orderStyleId);
+    }
+
+    @RequestMapping(value = "/statistics/v1/orderStyle", method = RequestMethod.PUT)
+    public String updateOrderStyle(@RequestBody OrderStyleVto orderVto) {
+        if (CheckUtils.checkParam(
+                orderVto.getOrderStyleId(),
+                orderVto.getOrderId(),
+                orderVto.getWorkDate(),
+                orderVto.getStyleCode(),
+                orderVto.getStyleName(),
+                orderVto.getAscription(),
+                orderVto.getPersons(),
+                orderVto.getCount(),
+                orderVto.getValuationType(),
+                orderVto.getPrice()
+                )) {
+            return ResponseUtils.createResponse(ResponseStatus.PESPONSE_ParamNull);
+        }
+        return orderService.updateOrderStyle(orderVto);
+    }
+
     @RequestMapping(value = "/statistics/v1/check", method = RequestMethod.PUT)
     public String checkOrderStyle(@RequestBody CheckVto checkVto) {
         if (CheckUtils.checkParam(
@@ -122,6 +159,18 @@ public class OrderController {
         return orderService.statisticsResult(id,statisticsType);
     }
 
+    @RequestMapping(value = "/statistics/v1/order/batchDelete",method = RequestMethod.POST)
+    public String batchDeleteOrderStyle(@RequestBody BatchDeleteOrderRequestVto batchDeleteOrderRequestVto) {
+        if (null == batchDeleteOrderRequestVto
+                || null == batchDeleteOrderRequestVto.getOrderId()
+                || "".equals(batchDeleteOrderRequestVto.getOrderStyleIds().replaceAll(" ",""))
+                || null == batchDeleteOrderRequestVto.getOrderStyleIds()
+                || "".equals(batchDeleteOrderRequestVto.getOrderStyleIds().replaceAll(" ",""))) {
+            return ResponseUtils.createResponse(ResponseStatus.PESPONSE_ParamNull);
+        }
+        return orderService.batchDeleteOrderStyle(batchDeleteOrderRequestVto.getOrderId(),batchDeleteOrderRequestVto.getOrderStyleIds());
+    }
+
     @RequestMapping(value = "/statistics/v1/exportExcel",method = RequestMethod.POST)
     public void reportExcel(HttpServletResponse response, HttpServletRequest request) {
         String orderIds = request.getParameter("exportOrderIds");
@@ -140,15 +189,4 @@ public class OrderController {
         }
     }
 
-    @RequestMapping(value = "/statistics/v1/order/batchDelete",method = RequestMethod.POST)
-    public String batchDeleteOrderStyle(@RequestBody BatchDeleteOrderRequestVto batchDeleteOrderRequestVto) {
-        if (null == batchDeleteOrderRequestVto
-                || null == batchDeleteOrderRequestVto.getOrderId()
-                || "".equals(batchDeleteOrderRequestVto.getOrderStyleIds().replaceAll(" ",""))
-                || null == batchDeleteOrderRequestVto.getOrderStyleIds()
-                || "".equals(batchDeleteOrderRequestVto.getOrderStyleIds().replaceAll(" ",""))) {
-            return ResponseUtils.createResponse(ResponseStatus.PESPONSE_ParamNull);
-        }
-        return orderService.batchDeleteOrderStyle(batchDeleteOrderRequestVto.getOrderId(),batchDeleteOrderRequestVto.getOrderStyleIds());
-    }
 }

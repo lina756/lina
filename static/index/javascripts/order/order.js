@@ -199,33 +199,27 @@
         }
 
         var result = [];
-        $('#orderStyleTable tbody .checkbox').each(function() {
+        $('#styleTable tbody .checkbox').each(function() {
             if($(this).attr("checked") === "checked") {
                 var value = $(this).attr("value");
                 result.push(value);
             }
         });
-        var orderStyleIds = result.join(",");
-        var orderId = localStorage.getItem("orderId");
+        var orderIds = result.join(",");
 
         function returnSuccess(data) {
-            var isDeleteOrder = data.data.isDeleteOrder;
-            if (isDeleteOrder) {
-                window.location.href = "http://localhost:8080/SM/index/order.html";
-            }else {
-                var orderStyleIds = data.data.orderStyleIds;
-                for (var i in orderStyleIds) {
-                    $('#' + orderStyleIds[i]).remove();
-                }
+            debugger;
+            var orderStyleIds = data.data.orderStyleIds;
+            for (var i in orderStyleIds) {
+                $('#' + orderStyleIds[i]).remove();
             }
         }
 
         var data = {
-            orderStyleIds:orderStyleIds,
-            orderId:orderId
+            orderIds:orderIds
         };
 
-        ajax("http://localhost:8080/SM/statistics/v1/order/batchDelete","POST",false,data,returnSuccess,error);
+        ajax("http://localhost:8080/SM/statistics/v1/orders/batchDelete","POST",false,data,returnSuccess,error);
     });
 
     $('#exportExcel').on("click",function() {
@@ -236,6 +230,10 @@
                 result.push(value);
             }
         });
+        if(result.length === 0) {
+            alert("请选择所要导出的订单");
+            return;
+        }
         var orderIds = result.join(",");
         var data = {
             orderIds:orderIds

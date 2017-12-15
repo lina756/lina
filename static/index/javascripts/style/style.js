@@ -113,12 +113,12 @@
     });
 
     $(document).on("click",".delStyle",function () {
-        var r=confirm("是否真的要删除？")
+        var r=confirm("是否真的要删除？");
         if (r === false) {
             return;
         }
         var styleId = $(this).attr("text");
-        console.log(styleId)
+        console.log(styleId);
 
         ajax(
             "http://localhost:8080/SM/statistics/v1/style?styleId="+styleId,

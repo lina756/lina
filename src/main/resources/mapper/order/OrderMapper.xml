@@ -63,18 +63,18 @@
         </choose>
     </select>
 
-    <select id="selectOrdersInOrderIds" resultMap="order">
+    <select id="selectOrdersInOrderIds" parameterType="angel.model.vto.BatchDeleteOrderRequestVto" resultMap="order">
          SELECT a.order_id as orderId,a.order_code as orderCode,a.create_order_person as createOrderPerson,b.id,
         b.work_date as workDate,b.style_code as styleCode,b.style_name as styleName,b.ascription,b.valuation_type as valuationType,
         b.persons,b.count,b.price,b.increase_price as increasePrice,b.total_price as totalPrice,
         b.check_person as checkPerson,b.check,b.remark
         FROM orders as a
         ,order_style AS b
-         WHERE a.order_id = b.order_id AND a.order_id IN (
-         <foreach collection="list" index="i" item="orderId" separator=",">
-             #{orderId}
+         WHERE a.order_id = b.order_id AND (
+         <foreach collection="list" index="i" item="parameter" separator=" or ">
+             (b.order_id = #{parameter.orderId} AND b.id = #{parameter.orderStyleId})
          </foreach>
-         )
+        )
     </select>
 
     <select id="selectOrderDetail" resultMap="order">
@@ -104,6 +104,13 @@
          valuation_type as valuationType,ascription,persons,"count",price,
          increase_price as increasePrice,total_price as totalPrice,"check",check_person as checkPerson,remark
          FROM order_style WHERE style_code = #{id}
+    </select>
+
+    <select id="selectOrderStyleDetail" resultMap="orderStyle">
+        SELECT order_id as orderId,work_date as workDate,style_code as styleCode,style_name as styleName,
+         valuation_type as valuationType,ascription,persons,"count",price,
+         increase_price as increasePrice,total_price as totalPrice,"check",check_person as checkPerson,remark
+         FROM order_style WHERE id = #{0}
     </select>
 
     <insert id="insertAscription">
@@ -137,6 +144,46 @@
         WHERE order_id = #{orderId}
     </update>
 
+    <update id="updateOrderStyle" parameterType="angel.model.bo.OrderStyleBo">
+        UPDATE order_style
+        <set>
+            <if test="workDate != null">
+                work_date = #{workDate},
+            </if>
+            <if test="styleCode != null">
+                style_code = #{styleCode},
+            </if>
+            <if test="styleName != null">
+                style_name = #{styleName},
+            </if>
+            <if test="valuationType != null">
+                valuation_type = #{valuationType},
+            </if>
+            <if test="ascription != null">
+                ascription = #{ascription},
+            </if>
+            <if test="persons != null">
+                persons = #{persons},
+            </if>
+            <if test="count != null">
+                "count" = #{count},
+            </if>
+            <if test="price != null">
+                "price" = #{price},
+            </if>
+            <if test="increasePrice != null">
+                increase_price = #{increasePrice},
+            </if>
+            <if test="totalPrice != null">
+                total_price = #{totalPrice},
+            </if>
+            <if test="remark != null">
+                remark = #{remark},
+            </if>
+        </set>
+        WHERE order_id = #{orderId} AND id = #{id}
+    </update>
+
     <update id="checkOrderStyle">
         UPDATE order_style
         <set>
@@ -155,6 +202,13 @@
 
     <delete id="deleteOrder">
         DELETE FROM orders WHERE order_id = #{0}
+    </delete>
+
+    <delete id="batchDeleteOrderStyleByOrderList" parameterType="angel.model.vto.BatchDeleteOrderRequestVto">
+        DELETE FROM order_style WHERE
+        <foreach collection="list" index="i" item="parameter" separator=" or ">
+            (order_id = #{parameter.orderId} AND id = #{parameter.orderStyleId})
+        </foreach>
     </delete>
 
     <delete id="batchDeleteOrderStyle">

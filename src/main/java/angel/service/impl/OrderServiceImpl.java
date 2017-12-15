@@ -10,9 +10,7 @@ import angel.model.mapper.order.ValuationMapper;
 import angel.model.vo.OrderStatisticsVo;
 import angel.model.vo.OrderStyleVo;
 import angel.model.vo.OrderVo;
-import angel.model.vto.CheckVto;
-import angel.model.vto.CompleteOrderVto;
-import angel.model.vto.OrderVto;
+import angel.model.vto.*;
 import angel.service.OrderService;
 import angel.util.ExcelUtil;
 import angel.util.ResponseStatus;
@@ -26,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.NumberUtils;
 import org.springframework.util.ObjectUtils;
 
 import javax.servlet.http.HttpServletResponse;
@@ -164,6 +163,22 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public String selectOrderStyleDetail(Integer orderStyleId) {
+        OrderStyleBo orderStyleBo = orderMapper.selectOrderStyleDetail(orderStyleId);
+        return ResponseUtils.successResponse(orderStyleBo);
+    }
+
+    @Override
+    public String updateOrderStyle(OrderStyleVto orderStyleVto) {
+        OrderStyleBo orderStyleBo = orderStyleVto.createBo();
+        int result = orderMapper.updateOrderStyle(orderStyleBo);
+        if (result <= 0) {
+            return ResponseUtils.createResponse(ResponseStatus.RESPONSE_CreateError);
+        }
+        return ResponseUtils.successResponse();
+    }
+
+    @Override
     public String checkOrderStyle(CheckVto checkVto) {
         String Ids = checkVto.getIds();
         List<String> idList = Arrays.asList(Ids.split(","));
@@ -217,7 +232,13 @@ public class OrderServiceImpl implements OrderService {
         if (orderIds.size() == 0){
             return ResponseUtils.createResponse(ResponseStatus.PESPONSE_ParamNull);
         }
-        List<OrderBo> orderBos = orderMapper.selectOrdersInOrderIds(orderIds);
+        List<BatchDeleteOrderRequestVto> batchDeleteOrderRequestVtos = new ArrayList<BatchDeleteOrderRequestVto>();
+        for (String id : orderIds) {
+            String[] args = id.split("\\|");
+            BatchDeleteOrderRequestVto batchDeleteOrderRequestVto = new BatchDeleteOrderRequestVto(args[0],NumberUtils.parseNumber(args[1],Integer.class));
+            batchDeleteOrderRequestVtos.add(batchDeleteOrderRequestVto);
+        }
+        List<OrderBo> orderBos = orderMapper.selectOrdersInOrderIds(batchDeleteOrderRequestVtos);
         if (null == orderBos
                 || orderBos.size() == 0) {
             return ResponseUtils.createResponse(ResponseStatus.PESPONSE_ParamNull);
@@ -233,6 +254,22 @@ public class OrderServiceImpl implements OrderService {
         }
         ExcelUtil.exportOrderExcel(completeOrderVtos,response.getOutputStream());
         return ResponseUtils.successResponse();
+    }
+
+    @Transactional
+    @Override
+    public String batchOrders(String orderIds) {
+        List<String> orderStyleIds = Arrays.asList(orderIds.split(","));
+        List<BatchDeleteOrderRequestVto> batchDeleteOrderRequestVtos = new ArrayList<BatchDeleteOrderRequestVto>();
+        for (String orderStyleId : orderStyleIds) {
+            String[] args = orderStyleId.split("\\|");
+            BatchDeleteOrderRequestVto batchDeleteOrderRequestVto = new BatchDeleteOrderRequestVto(args[0], NumberUtils.parseNumber(args[1],Integer.class));
+            batchDeleteOrderRequestVtos.add(batchDeleteOrderRequestVto);
+        }
+        orderMapper.batchDeleteOrderStyleByOrderList(batchDeleteOrderRequestVtos);
+        JsonObject result = new JsonObject();
+        result.add("orderStyleIds",new Gson().toJsonTree(orderStyleIds));
+        return ResponseUtils.successResponse(result);
     }
 
     @Transactional

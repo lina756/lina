@@ -3,6 +3,7 @@ package angel.service;
 import angel.model.bo.StyleBo;
 import angel.model.vo.StyleVo;
 import angel.model.vto.CheckVto;
+import angel.model.vto.OrderStyleVto;
 import angel.model.vto.OrderVto;
 
 import javax.servlet.http.HttpServletResponse;
@@ -70,6 +71,22 @@ public interface OrderService {
     String createOrderStyle(OrderVto orderVto);
 
     /**
+     * 订单款式详情
+     *
+     * @param orderStyleId
+     * @return
+     */
+    String selectOrderStyleDetail(Integer orderStyleId);
+
+    /**
+     * 更新订单详情
+     *
+     * @param orderStyleVto
+     * @return
+     */
+    String updateOrderStyle(OrderStyleVto orderStyleVto);
+
+    /**
      * 验收
      *
      * @param checkVto
@@ -95,6 +112,8 @@ public interface OrderService {
      * @throws IOException
      */
     String exportExcel(HttpServletResponse response,String orderIds) throws IOException;
+
+    String batchOrders(String orderIds);
 
     String batchDeleteOrderStyle(String orderId,String orderStyleIds);
 }

@@ -144,6 +144,20 @@
         $('#edit').val("")
     }
 
+    function initUpdateBox() {
+        $('#updateWorkDate').val("");
+        $('#updateStyleCode').val("");
+        $("#updateAscription").val("");
+        $('#updateStyleName').val("");
+        $('#updatePersons').val("");
+        $('#updateCount').val("");
+        $('#updateValuationType').val("0");
+        $('#price').val("");
+        $('#increasePrice').val("");
+        $('#updateRemark').val("")
+        $('#updateEdit').val("")
+    }
+
     $('#createOrderStyle').on('click',function() {
         var orderId = localStorage.getItem("orderId");
         var workDate = $('#workDate').val();
@@ -260,8 +274,68 @@
     }
 
     $(document).on("click",".editOrderStyle",function () {
-        initBox();
-       $('#box').toggle();
+        var orderStyleId = $(this).attr("text");
+        initUpdateBox();
+       $('#updateBox').toggle();
+
+       function returnSuccess(data) {
+           var result = data.data;
+           $('#updateWorkDate').val(result.workDate);
+           $('#updateStyleCode').val(result.styleCode);
+           $("#updateAscription").val(result.ascription);
+           $('#updateStyleName').val(result.styleName);
+           $('#updatePersons').val(result.persons);
+           $('#updateCount').val(result.count);
+           $('#updateValuationType').val(result.valuationType);
+           $('#price').val(result.price);
+           $('#increasePrice').val(result.increasePrice);
+           $('#updateRemark').val(result.remark);
+           $('#updateEdit').val(orderStyleId);
+       }
+
+       ajax("http://localhost:8080/SM/statistics/v1/orderStyle?orderStyleId="+orderStyleId, "get", false, null, returnSuccess, error);
+    });
+
+    $('#cancelUpdate').on("click",function () {
+       initUpdateBox();
+        $('#updateBox').toggle();
+    });
+
+    $('#updateOrderStyle').on("click",function() {
+        var orderId = localStorage.getItem("orderId");
+        var workDate = $('#updateWorkDate').val();
+        var styleCode = $('#updateStyleCode').val();
+        var ascription = $("#updateAscription").val();
+        var styleName = $('#updateStyleName').val();
+        var persons = $('#updatePersons').val();
+        var count = $('#updateCount').val();
+        var valuationType = $('#updateValuationType').val();
+        var price = $('#price').val();
+        var increasePrice = $('#increasePrice').val();
+        var remark = $('#updateRemark').val();
+        var orderStyleId = $('#updateEdit').val();
+
+        var data = {
+            workDate:workDate,
+            styleCode:styleCode,
+            styleName:styleName,
+            ascription:ascription,
+            persons:persons,
+            count:count,
+            valuationType:valuationType,
+            price:price,
+            increasePrice:increasePrice,
+            remark:remark,
+            orderId:orderId,
+            orderStyleId:orderStyleId
+        };
+
+        function returnSuccess(data) {
+            debugger;
+            ajax("http://localhost:8080/SM/statistics/v1/orderDetail?orderId=" + orderId, "get", false, null, initOrderDetail, error);
+        }
+
+        ajax("http://localhost:8080/SM/statistics/v1/orderStyle?orderStyleId="+orderStyleId, "put", false, data, returnSuccess, error)
     });
 
     $(document).on("click",".delOrderStyle",function() {

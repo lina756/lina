@@ -235,7 +235,7 @@
 
               <div class="group navform wat-cf">
                 <button id="createOrderStyle" class="button" type="button">
-                  <img src="images/icons/tick.png" alt="Save" /> 关联
+                  <img src="images/icons/tick.png" alt="Save" /> 完成
                 </button>
               </div>
             </div>
@@ -272,6 +272,131 @@
           </div>
         </div>
       </div>
+
+
+      <div id="updateBox">
+        <div class="block" id="block-signup2">
+          <h2>更新</h2>
+          <div class="content">
+            <div class="form">
+              <div class="group wat-cf">
+                <div class="left">
+                  <label class="label">工作日期</label>
+                </div>
+                <div class="right">
+                  <input id="updateWorkDate" type="text" class="text_field" />
+                  <span class="description">Ex: 工作日期</span>
+                </div>
+              </div>
+
+              <div class="group wat-cf">
+                <div class="left">
+                  <label class="label">款号</label>
+                </div>
+                <div class="right">
+                  <input id="updateStyleCode" type="text" style="background: #cccccc;color: #fff;" class="text_field" />
+                  <span style="display:block;" class="description">Ex: 款号</span>
+                </div>
+              </div>
+
+              <div class="group wat-cf">
+                <div class="left">
+                  <label class="label">款式</label>
+                </div>
+                <div class="right">
+                  <input id="updateStyleName" type="text" style="background: #cccccc;color: #fff;" class="text_field" />
+                  <span class="description">Ex: 款式</span>
+                </div>
+              </div>
+
+              <div class="group wat-cf">
+                <div class="left">
+                  <label class="label">摘要</label>
+                </div>
+                <div class="right">
+                  <input id="updateAscription" type="text" class="text_field" />
+                  <span class="description">Ex: 摘要</span>
+                </div>
+              </div>
+
+              <div class="group wat-cf">
+                <div class="left">
+                  <label class="label">人数</label>
+                </div>
+                <div class="right">
+                  <input id="updatePersons" type="text" class="text_field" />
+                  <span class="description">Ex: 人数</span>
+                </div>
+              </div>
+
+              <div class="group wat-cf">
+                <div class="left">
+                  <label class="label">数量</label>
+                </div>
+                <div class="right">
+                  <input id="updateCount" type="text" class="text_field" />
+                  <span class="description">Ex: 数量</span>
+                </div>
+              </div>
+
+              <div class="group wat-cf">
+                <div class="left">
+                  <label class="label">计价方式</label>
+                </div>
+                <div class="right">
+                  <select id="updateValuationType" class="text_field" style="width: 150px;">
+                      <option value="0">计时</option>
+                      <option value="1">计件</option>
+                  </select>
+                  <span style="display:block;" class="description">Ex: 计价方式</span>
+                </div>
+              </div>
+
+                <div class="group wat-cf">
+                    <div class="left">
+                        <label class="label">工价</label>
+                    </div>
+                    <div class="right">
+                        <input id="price" type="text" class="text_field" />
+                        <span class="description">Ex: 工价</span>
+                    </div>
+                </div>
+
+                <div class="group wat-cf">
+                    <div class="left">
+                        <label class="label">加价</label>
+                    </div>
+                    <div class="right">
+                        <input id="increasePrice" type="text" class="text_field" />
+                        <span class="description">Ex: 加价</span>
+                    </div>
+                </div>
+
+              <div class="group wat-cf">
+                <div class="left">
+                  <label class="label">备注</label>
+                </div>
+                <div class="right">
+                  <input id="updateRemark" type="text" class="text_field" />
+                  <span class="description">Ex: 备注</span>
+                </div>
+              </div>
+
+              <input id="updateEdit" type="hidden"/>
+
+              <div class="group navform wat-cf">
+                <button id="updateOrderStyle" class="button" type="button">
+                  <img src="images/icons/tick.png" alt="Save" /> 完成
+                </button>
+                  <button id="cancelUpdate" class="button" type="button">
+                      <img src="images/icons/cross.png" alt="Save" /> 取消
+                  </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </body>
