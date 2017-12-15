@@ -98,8 +98,8 @@
             result.push("</td>");
 
             result.push("</tr>");
-
-            $('#orderStyleTable tbody').append(result.join(""));
+            $('#orderStyleTable tbody')
+            .append(result.join(""));
         }
     }
 
@@ -331,7 +331,8 @@
         };
 
         function returnSuccess(data) {
-            debugger;
+            $('#updateBox').toggle();
+            $('#orderStyleTable tbody').empty();
             ajax("http://localhost:8080/SM/statistics/v1/orderDetail?orderId=" + orderId, "get", false, null, initOrderDetail, error);
         }
 
