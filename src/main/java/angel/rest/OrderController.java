@@ -127,7 +127,6 @@ public class OrderController {
                 orderVto.getStyleCode(),
                 orderVto.getStyleName(),
                 orderVto.getAscription(),
-                orderVto.getPersons(),
                 orderVto.getCount(),
                 orderVto.getValuationType(),
                 orderVto.getPrice()

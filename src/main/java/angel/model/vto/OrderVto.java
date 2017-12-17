@@ -1,8 +1,6 @@
 package angel.model.vto;
 
 import angel.model.bo.OrderBo;
-import angel.model.vo.StyleVo;
-import com.sun.tools.corba.se.idl.constExpr.Or;
 
 import java.util.List;
 

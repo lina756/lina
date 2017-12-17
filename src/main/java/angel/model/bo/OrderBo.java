@@ -151,7 +151,7 @@ public class OrderBo {
             completeOrderVto.setPrice(orderStyleBo.getPrice());
             completeOrderVto.setIncreasePrice(orderStyleBo.getIncreasePrice());
             completeOrderVto.setTotalPrice(orderStyleBo.getTotalPrice());
-            completeOrderVto.setCheck(orderStyleBo.getCheck());
+            completeOrderVto.setCheck(orderStyleBo.getCheck() == 0? "待验收":"已验收");
             completeOrderVto.setCheckPerson(orderStyleBo.getCheckPerson());
             completeOrderVto.setRemark(orderStyleBo.getRemark());
             completeOrderVtos.add(completeOrderVto);

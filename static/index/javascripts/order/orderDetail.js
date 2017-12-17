@@ -128,7 +128,7 @@
             }
             $('#valuationType').append(result.join(""));
         }
-        ajax("http://localhost:8080/SM/statistics/v1/valuation?styleId="+styleId, "get", false, null, initValuationList, error);
+        ajax("http://47.100.3.68:8080/SM/statistics/v1/valuation?styleId="+styleId, "get", false, null, initValuationList, error);
     });
 
     function initBox() {
@@ -262,14 +262,14 @@
             addTr(data.data);
         }
 
-        ajax("http://localhost:8080/SM/statistics/v1/orderStyle","post",false,data,returnSuccess,error);
+        ajax("http://47.100.3.68:8080/SM/statistics/v1/orderStyle","post",false,data,returnSuccess,error);
     });
 
     function initHtml() {
         var orderId = localStorage.getItem("orderId");
         if (orderId !== null && orderId !== undefined && orderId !== "") {
-            ajax("http://localhost:8080/SM/statistics/v1/orderDetail?orderId=" + orderId, "get", false, null, initOrderDetail, error);
-            ajax("http://localhost:8080/SM/statistics/v1/styles", "get", false, null, initStyleList, error);
+            ajax("http://47.100.3.68:8080/SM/statistics/v1/orderDetail?orderId=" + orderId, "get", false, null, initOrderDetail, error);
+            ajax("http://47.100.3.68:8080/SM/statistics/v1/styles", "get", false, null, initStyleList, error);
         }
     }
 
@@ -293,7 +293,7 @@
            $('#updateEdit').val(orderStyleId);
        }
 
-       ajax("http://localhost:8080/SM/statistics/v1/orderStyle?orderStyleId="+orderStyleId, "get", false, null, returnSuccess, error);
+       ajax("http://47.100.3.68:8080/SM/statistics/v1/orderStyle?orderStyleId="+orderStyleId, "get", false, null, returnSuccess, error);
     });
 
     $('#cancelUpdate').on("click",function () {
@@ -333,10 +333,10 @@
         function returnSuccess(data) {
             $('#updateBox').toggle();
             $('#orderStyleTable tbody').empty();
-            ajax("http://localhost:8080/SM/statistics/v1/orderDetail?orderId=" + orderId, "get", false, null, initOrderDetail, error);
+            ajax("http://47.100.3.68:8080/SM/statistics/v1/orderDetail?orderId=" + orderId, "get", false, null, initOrderDetail, error);
         }
 
-        ajax("http://localhost:8080/SM/statistics/v1/orderStyle?orderStyleId="+orderStyleId, "put", false, data, returnSuccess, error)
+        ajax("http://47.100.3.68:8080/SM/statistics/v1/orderStyle?orderStyleId="+orderStyleId, "put", false, data, returnSuccess, error)
     });
 
     $(document).on("click",".delOrderStyle",function() {
@@ -349,13 +349,13 @@
         function returnSuccess(data) {
             var isDeleteOrder = data.data.isDeleteOrder;
             if (isDeleteOrder) {
-                window.location.href = "http://localhost:8080/SM/index/order.html";
+                window.location.href = "http://47.100.3.68:8080/index/order.html";
             }else {
                 var id = data.data.id;
                 $("#" + id).remove();
             }
         }
-        ajax("http://localhost:8080/SM/statistics/v1/orderStyle?orderId="+orderId+"&id="+id,"delete",false,null,returnSuccess,error);
+        ajax("http://47.100.3.68:8080/SM/statistics/v1/orderStyle?orderId="+orderId+"&id="+id,"delete",false,null,returnSuccess,error);
     });
 
     $('#addOrderStyle').on("click",function () {
@@ -364,7 +364,7 @@
     });
 
     $('#cancelEdit').on("click",function() {
-       window.location.href="http://localhost:8080/SM/index/order.html";
+       window.location.href="http://47.100.3.68:8080/index/order.html";
     });
 
     $('#submitEdit').on("click",function() {
@@ -379,10 +379,10 @@
         };
 
         function returnSuccess(data) {
-            window.location.href="http://localhost:8080/SM/index/order.html";
+            window.location.href="http://47.100.3.68:8080/index/order.html";
         }
 
-        ajax("http://localhost:8080/SM/statistics/v1/order","put",false,data,returnSuccess,error);
+        ajax("http://47.100.3.68:8080/SM/statistics/v1/order","put",false,data,returnSuccess,error);
     });
 
     $(document).on("click",".checkOrderStyle",function() {
@@ -406,7 +406,7 @@
             initHtml();
         }
 
-        ajax("http://localhost:8080/SM/statistics/v1/check","PUT",false,data,returnSuccess,error);
+        ajax("http://47.100.3.68:8080/SM/statistics/v1/check","PUT",false,data,returnSuccess,error);
     });
 
     $('#cancelCheck').on("click",function() {
@@ -433,7 +433,7 @@
         function returnSuccess(data) {
             var isDeleteOrder = data.data.isDeleteOrder;
             if (isDeleteOrder) {
-                window.location.href = "http://localhost:8080/SM/index/order.html";
+                window.location.href = "http://47.100.3.68:8080/index/order.html";
             }else {
                 var orderStyleIds = data.data.orderStyleIds;
                 for (var i in orderStyleIds) {
@@ -447,7 +447,7 @@
             orderId:orderId
         };
 
-        ajax("http://localhost:8080/SM/statistics/v1/order/batchDelete","POST",false,data,returnSuccess,error);
+        ajax("http://47.100.3.68:8080/SM/statistics/v1/order/batchDelete","POST",false,data,returnSuccess,error);
     });
 
     initHtml();

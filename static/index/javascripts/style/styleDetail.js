@@ -60,7 +60,7 @@
 
     function initHtml() {
         var styleId = localStorage.getItem("styleId");
-        ajax("http://localhost:8080/SM/statistics/v1/styleDetail?styleId="+styleId,"get",false,null,initStyleDetail,error);
+        ajax("http://47.100.3.68:8080/SM/statistics/v1/styleDetail?styleId="+styleId,"get",false,null,initStyleDetail,error);
     }
 
     function changeValuationForm() {
@@ -77,7 +77,7 @@
 
     $('#submitEdit').on("click",function () {
         function returnSuccess() {
-            window.location.href="http://localhost:8080/SM/index/style.html";
+            window.location.href="http://47.100.3.68:8080/index/style.html";
         }
 
         var styleCode = $('#styleCode').val();
@@ -90,11 +90,11 @@
             styleName:styleName
         };
 
-        ajax("http://localhost:8080/SM/statistics/v1/style","put",false,data,returnSuccess,error);
+        ajax("http://47.100.3.68:8080/SM/statistics/v1/style","put",false,data,returnSuccess,error);
     });
 
     $('#cancelEdit').on("click",function () {
-        window.location.href="http://localhost:8080/SM/index/style.html";
+        window.location.href="http://47.100.3.68:8080/index/style.html";
     });
 
     $('#createValuation').on("click",function() {
@@ -168,9 +168,9 @@
 
         if (edit !== null &&edit !== undefined && edit !== "") {
             data.valuationId = edit;
-            ajax("http://localhost:8080/SM/statistics/v1/valuation", "put", false, data, editSuccess, error);
+            ajax("http://47.100.3.68:8080/SM/statistics/v1/valuation", "put", false, data, editSuccess, error);
         }else {
-            ajax("http://localhost:8080/SM/statistics/v1/valuation", "post", false, data, returnSuccess, error);
+            ajax("http://47.100.3.68:8080/SM/statistics/v1/valuation", "post", false, data, returnSuccess, error);
         }
     });
 
@@ -185,7 +185,7 @@
         function returnSuccess(data) {
             $("tr#"+data.data).remove();
         }
-       ajax("http://localhost:8080/SM/statistics/v1/valuation?valuationId="+valuationId,"delete",false,null,returnSuccess,error);
+       ajax("http://47.100.3.68:8080/SM/statistics/v1/valuation?valuationId="+valuationId,"delete",false,null,returnSuccess,error);
     });
 
     $(document).on("click",".editValuation",function() {

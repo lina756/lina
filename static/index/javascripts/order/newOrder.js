@@ -19,7 +19,7 @@
     }
 
     function initHtml() {
-        ajax("http://localhost:8080/SM/statistics/v1/styles", "get", false, null, initStyleList, error);
+        ajax("http://47.100.3.68:8080/SM/statistics/v1/styles", "get", false, null, initStyleList, error);
     }
 
     initHtml();
@@ -44,7 +44,11 @@
             }
             $('#valuationType').append(result.join(""));
         }
-        ajax("http://localhost:8080/SM/statistics/v1/valuation?styleId="+styleId, "get", false, null, initValuationList, error);
+        ajax("http://47.100.3.68:8080/SM/statistics/v1/valuation?styleId="+styleId, "get", false, null, initValuationList, error);
+    });
+
+    $('#cancelCreateOrder').on("click",function() {
+        window.location.href="http://47.100.3.68:8080/index/order.html";
     });
 
     $('#submitCreateOrder').on("click",function() {
@@ -71,10 +75,10 @@
         };
 
         function returnSuccess() {
-            window.location.href = "http://localhost:8080/SM/index/order.html";
+            window.location.href = "http://47.100.3.68:8080/index/order.html";
         }
 
-        ajax("http://localhost:8080/SM/statistics/v1/order","post",false,data,returnSuccess,error);
+        ajax("http://47.100.3.68:8080/SM/statistics/v1/order","post",false,data,returnSuccess,error);
     });
 
 })();

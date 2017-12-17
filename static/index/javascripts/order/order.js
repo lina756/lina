@@ -95,7 +95,7 @@
 
     function initHtml() {
         localStorage.clear();
-        ajax("http://localhost:8080/SM/statistics/v1/orders","get",false,null,initOrderList,error);
+        ajax("http://47.100.3.68:8080/SM/statistics/v1/orders","get",false,null,initOrderList,error);
     };
 
     $('#selectOrder').on("click",function() {
@@ -105,18 +105,18 @@
             $('#styleTable tbody').empty();
             initOrderList(data);
         }
-        ajax("http://localhost:8080/SM/statistics/v1/orders?filter="+filter+"&checkStatus="+checkStatus,"get",false,null,resultSuccess,error);
+        ajax("http://47.100.3.68:8080/SM/statistics/v1/orders?filter="+filter+"&checkStatus="+checkStatus,"get",false,null,resultSuccess,error);
     });
 
     $(document).on("click",".editOrder",function() {
         var ids = $(this).attr("text").split("|");
         var orderId = ids[0];
         localStorage.setItem("orderId",orderId);
-        window.location.href = "http://localhost:8080/SM/index/orderDetail.html";
+        window.location.href = "http://47.100.3.68:8080/index/orderDetail.html";
     });
 
     $(document).on("click",".delOrder",function() {
-        var r=confirm("是否真的要删除？")
+        var r=confirm("是否真的要删除？");
         if (r === false) {
             return;
         }
@@ -127,7 +127,7 @@
             var realId = data.data+id;
             $('#'+realId).remove();
         }
-       ajax("http://localhost:8080/SM/statistics/v1/order?orderId="+orderId+"&id="+id,"delete",false,null,returnSuccess,error);
+       ajax("http://47.100.3.68:8080/SM/statistics/v1/order?orderId="+orderId+"&id="+id,"delete",false,null,returnSuccess,error);
     });
 
     function initBox() {
@@ -158,7 +158,7 @@
             initHtml();
         }
 
-        ajax("http://localhost:8080/SM/statistics/v1/check","PUT",false,data,returnSuccess,error);
+        ajax("http://47.100.3.68:8080/SM/statistics/v1/check","PUT",false,data,returnSuccess,error);
     });
 
     $('#cancelCheck').on("click",function() {
@@ -189,7 +189,7 @@
             $('#statisticsResult').html(result.join(""));
         }
 
-        ajax("http://localhost:8080/SM/statistics/v1/statisticsResult?id="+id+"&type="+statisticsType,"GET",false,null,resultSeccess,error);
+        ajax("http://47.100.3.68:8080/SM/statistics/v1/statisticsResult?id="+id+"&type="+statisticsType,"GET",false,null,resultSeccess,error);
     });
 
     $('#batchDelete').on("click",function() {
@@ -208,10 +208,11 @@
         var orderIds = result.join(",");
 
         function returnSuccess(data) {
-            debugger;
             var orderStyleIds = data.data.orderStyleIds;
             for (var i in orderStyleIds) {
-                $('#' + orderStyleIds[i]).remove();
+                var args = orderStyleIds[i].split("|");
+                var orderId = args[0]+args[1];
+                $('#' + orderId).remove();
             }
         }
 
@@ -219,7 +220,7 @@
             orderIds:orderIds
         };
 
-        ajax("http://localhost:8080/SM/statistics/v1/orders/batchDelete","POST",false,data,returnSuccess,error);
+        ajax("http://47.100.3.68:8080/SM/statistics/v1/orders/batchDelete","POST",false,data,returnSuccess,error);
     });
 
     $('#exportExcel').on("click",function() {
@@ -240,7 +241,7 @@
         };
 
         $('#exportOrderIds').val(orderIds);
-        $('#exportExcelForm').attr("action","http://localhost:8080/SM/statistics/v1/exportExcel");
+        $('#exportExcelForm').attr("action","http://47.100.3.68:8080/SM/statistics/v1/exportExcel");
         $('#exportExcelForm').submit();
     });
 

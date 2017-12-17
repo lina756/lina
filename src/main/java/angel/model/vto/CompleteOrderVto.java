@@ -29,9 +29,9 @@ public class CompleteOrderVto {
 
     private Double totalPrice;
 
-    private String checkPerson;
+    private String check;
 
-    private int check;
+    private String checkPerson;
 
     private String remark;
 
@@ -139,11 +139,11 @@ public class CompleteOrderVto {
         this.checkPerson = checkPerson;
     }
 
-    public int getCheck() {
+    public String getCheck() {
         return check;
     }
 
-    public void setCheck(int check) {
+    public void setCheck(String check) {
         this.check = check;
     }
 

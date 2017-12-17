@@ -11,15 +11,15 @@
 
 
 $(document).on("click","#addNewOrder",function() {
-    window.location.href="http://localhost:8080/SM/index/newOrder.html";
+    window.location.href="http://47.100.3.68:8080/index/newOrder.html";
 });
 
 $(document).on("click","#toOrderList",function() {
-    window.location.href="http://localhost:8080/SM/index/order.html";
+    window.location.href="http://47.100.3.68:8080/index/order.html";
 });
 
 $(document).on("click","#toStyleList",function() {
-    window.location.href="http://localhost:8080/SM/index/style.html";
+    window.location.href="http://47.100.3.68:8080/index/style.html";
 });
 
 var error = function() {

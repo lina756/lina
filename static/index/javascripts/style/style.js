@@ -6,7 +6,7 @@
         localStorage.clear();
         var page = 1;
         var pageSize = 10;
-        ajax("http://localhost:8080/SM/statistics/v1/styles?page="+page+"&pageSize="+pageSize,"get",false,null,render,error);
+        ajax("http://47.100.3.68:8080/SM/statistics/v1/styles?page="+page+"&pageSize="+pageSize,"get",false,null,render,error);
     }
     function init() {
         $('#styleCode').val("");
@@ -94,22 +94,30 @@
         };
 
         function addTr(data) {
-
+            var styleCode = $('#styleCode').val();
+            var styleName = $('#styleName').val();
+            var priceType = $('#priceType').val();
+            var price = $('#price').val();
+            var increasePrice = $('#increasePrice').val();
         }
 
         function createSuccess(data) {
             $('#box').hide();
             addTr(data.data);
+            $('#styleTable tbody').empty();
+            var page = 1;
+            var pageSize = 10;
+            ajax("http://47.100.3.68:8080/SM/statistics/v1/styles?page="+page+"&pageSize="+pageSize,"get",false,null,render,error);
         }
 
-        ajax("http://localhost:8080/SM/statistics/v1/style","post",false,data,createSuccess,error);
+        ajax("http://47.100.3.68:8080/SM/statistics/v1/style","post",false,data,createSuccess,error);
     });
 
     $(document).on("click",'.editStyle',function () {
         var styleId = $(this).attr("text");
         console.log(styleId);
         localStorage.setItem("styleId",styleId);
-        window.location.href="http://localhost:8080/SM/index/styleDetail.html";
+        window.location.href="http://47.100.3.68:8080/index/styleDetail.html";
     });
 
     $(document).on("click",".delStyle",function () {
@@ -121,7 +129,7 @@
         console.log(styleId);
 
         ajax(
-            "http://localhost:8080/SM/statistics/v1/style?styleId="+styleId,
+            "http://47.100.3.68:8080/SM/statistics/v1/style?styleId="+styleId,
             "delete",
             false,
             null,
